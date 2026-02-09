@@ -1,9 +1,0 @@
-
-> frontend@1.0.0 start
-> expo start --lan --port 8092 --clear
-
-env: load .env
-env: export EXPO_PUBLIC_BACKEND_URL EXPO_PUBLIC_WEB_URL EXPO_NO_DOCTOR
-Starting project at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend
-Starting Metro Bundler
-warning: Bundler cache is empty, rebuilding (this may take a minute)

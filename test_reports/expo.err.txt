@@ -1,3 +1,0 @@
-The following packages should be updated for best compatibility with the installed expo version:
-  react-native-worklets@0.5.2 - expected version: 0.5.1
-Your project may not work correctly until you install the expected versions of the packages.

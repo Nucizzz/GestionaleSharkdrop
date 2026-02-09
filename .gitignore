@@ -75,9 +75,29 @@ agenthub/agents/youtube/db
 
 # Build caches
 .cache/
+.metro-cache/
 
 # Mobile development
 android-sdk/ -e 
 # Environment files
 *.env
 *.env.*
+
+# AI artifacts (do not track)
+.emergent/
+
+# Local databases / logs / runtime outputs
+backend/.mongo/
+backend/*.log
+frontend/.metro-cache/
+frontend/*.log
+frontend/expo*.png
+frontend/expogo-qr.png
+frontend/expo*.log
+frontend/web*.log
+test_reports/
+memory/
+project.tgz
+
+# Frontend build output (built in container)
+frontend/dist/
