@@ -81,6 +81,10 @@ logger = logging.getLogger(__name__)
 shopify_sync_lock = asyncio.Lock()
 shopify_sync_task = None
 
+# Shopify variant UPC backup metafield
+UPC_BACKUP_NAMESPACE = os.getenv("UPC_BACKUP_NAMESPACE", "custom").strip() or "custom"
+UPC_BACKUP_KEY = os.getenv("UPC_BACKUP_KEY", "upc_backup").strip() or "upc_backup"
+
 def get_shopify_config():
     shop_domain = os.environ.get("SHOPIFY_SHOP_DOMAIN") or os.environ.get("SHOP_DOMAIN")
     access_token = os.environ.get("SHOPIFY_ACCESS_TOKEN") or os.environ.get("ADMIN_API_TOKEN")
@@ -2994,22 +2998,46 @@ async def run_shopify_sync(mode: str, current_user: dict):
                             if image_url:
                                 image_base64 = await download_image_as_base64(image_url)
 
+                        # Create variants + fetch UPC backup metafields
+                        variant_ids = [str(v.get("id")) for v in shopify_product.get("variants", []) if v.get("id")]
+                        upc_backup_map: dict[str, str] = {}
+                        for variant_id in variant_ids:
+                            url = (
+                                f"https://{shop_domain}/admin/api/{api_version}/variants/{variant_id}"
+                                f"/metafields.json?namespace={UPC_BACKUP_NAMESPACE}&key={UPC_BACKUP_KEY}"
+                            )
+                            try:
+                                mf_resp = await client.get(url, headers=headers)
+                                if mf_resp.status_code == 200:
+                                    mfs = (mf_resp.json() or {}).get("metafields") or []
+                                    if mfs:
+                                        val = mfs[0].get("value")
+                                        if val is not None:
+                                            digits = re.sub(r"\\D+", "", str(val))
+                                            upc_backup_map[variant_id] = digits or str(val).strip()
+                            except Exception:
+                                # Ignore metafield failures; do not block sync
+                                pass
+                            await asyncio.sleep(0.02)
+
                         # Create variants
                         variants = []
                         for shopify_variant in shopify_product.get("variants", []):
+                            v_id = str(shopify_variant.get("id"))
                             variants.append({
-                            "id": str(uuid.uuid4()),
-                            "shopify_variant_id": str(shopify_variant["id"]),
-                            "product_id": "",  # Will be set below
-                            "title": shopify_variant.get("title", "Default"),
-                            "sku": shopify_variant.get("sku"),
-                            "barcode": shopify_variant.get("barcode"),
-                            "price": float(shopify_variant.get("price", 0)) if shopify_variant.get("price") else 0,
-                            "inventory_item_id": str(shopify_variant.get("inventory_item_id")) if shopify_variant.get("inventory_item_id") else None,
-                            "inventory_management": shopify_variant.get("inventory_management"),
-                            "inventory_quantity": shopify_variant.get("inventory_quantity"),
-                            "created_at": datetime.utcnow()
-                            })
+                              "id": str(uuid.uuid4()),
+                              "shopify_variant_id": v_id,
+                              "product_id": "",  # Will be set below
+                              "title": shopify_variant.get("title", "Default"),
+                              "sku": shopify_variant.get("sku"),
+                              "barcode": shopify_variant.get("barcode"),
+                              "upc_backup": upc_backup_map.get(v_id),
+                              "price": float(shopify_variant.get("price", 0)) if shopify_variant.get("price") else 0,
+                              "inventory_item_id": str(shopify_variant.get("inventory_item_id")) if shopify_variant.get("inventory_item_id") else None,
+                              "inventory_management": shopify_variant.get("inventory_management"),
+                              "inventory_quantity": shopify_variant.get("inventory_quantity"),
+                              "created_at": datetime.utcnow()
+                              })
 
                         # Check if product exists
                         existing = await db.products.find_one({"shopify_product_id": shopify_id})
@@ -3026,6 +3054,8 @@ async def run_shopify_sync(mode: str, current_user: dict):
                                     old_v = existing_variants[shopify_vid]
                                     new_v["id"] = old_v["id"]
                                     new_v["product_id"] = existing["id"]
+                                    if not new_v.get("upc_backup") and old_v.get("upc_backup"):
+                                        new_v["upc_backup"] = old_v.get("upc_backup")
                                 else:
                                     new_v["product_id"] = existing["id"]
                                 updated_variants.append(new_v)
