@@ -1,0 +1,26 @@
+{
+  "cli": {
+    "version": ">= 12.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "preview": {
+      "env": {
+        "EXPO_PUBLIC_BACKEND_URL": "https://gestionale.sharkdrop.it",
+        "EXPO_PUBLIC_WEB_URL": "https://gestionale.sharkdrop.it"
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_BACKEND_URL": "https://gestionale.sharkdrop.it",
+        "EXPO_PUBLIC_WEB_URL": "https://gestionale.sharkdrop.it"
+      },
+      "android": {
+        "buildType": "app-bundle"
+      }
+    }
+  }
+}

@@ -1,0 +1,95 @@
+INFO:     Started server process [1376]
+INFO:     Waiting for application startup.
+2026-02-05 15:15:59,553 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "C:\Users\jnuci\AppData\Local\Programs\Python\Python313\Lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:54789 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     192.168.0.16:54790 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50536 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     192.168.0.16:50537 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50592 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50598 - "GET /api/products/barcode/197599876625 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59336 - "GET /api/dashboard/stats HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59336 - "GET /api/dashboard/stats HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59336 - "GET /api/dashboard/stats HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59364 - "GET /api/purchase-links HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59406 - "GET /api/public/purchase/3d94215b90254b0cbfe8b191d727fdb0 HTTP/1.1" 200 OK
+INFO:     192.168.0.240:52483 - "GET /api/public/purchase/3d94215b90254b0cbfe8b191d727fdb0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59522 - "GET /api/products?limit=60&offset=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59524 - "GET /api/products?limit=60&offset=0 HTTP/1.1" 200 OK
+2026-02-05 15:33:56,521 - server - INFO - ACTION: ActionType.SHOPIFY_UPDATE by admin - Created purchase link: €865.00 for 2 items
+INFO:     192.168.0.252:59570 - "POST /api/purchase-links HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59598 - "GET /api/purchase-links/b1926cd9-f856-42a8-8e66-8d3c588c23b4/pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NGEwOTVmMC04MjM2LTRhMGItOTJiMS0xNDlmZDhkNDE1NGEiLCJleHAiOjE3NzA2NTk4NTR9.Fp-vn-rcqB25qJMOwKLDEk32Df_qyJC4_25AqTyd138 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59672 - "GET /api/products/barcode/194958241278 HTTP/1.1" 404 Not Found
+INFO:     192.168.0.252:59672 - "GET /api/products?search=194958241278&limit=20&offset=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59696 - "GET /api/stockx/imports?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59694 - "GET /api/stockx/lookup?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59672 - "POST /api/stockx/lookup HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59672 - "GET /api/stockx/imports?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59732 - "GET /api/stockx/lookup?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59672 - "GET /api/products/barcode/194954560113 HTTP/1.1" 404 Not Found
+INFO:     192.168.0.252:59672 - "GET /api/products?search=194954560113&limit=20&offset=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59758 - "GET /api/stockx/imports?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59760 - "GET /api/stockx/lookup?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59672 - "POST /api/stockx/lookup HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59672 - "GET /api/stockx/lookup?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59836 - "GET /api/stockx/imports?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59672 - "GET /api/products/barcode/194958241278 HTTP/1.1" 404 Not Found
+INFO:     192.168.0.252:59672 - "GET /api/products?search=194958241278&limit=20&offset=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59836 - "GET /api/stockx/lookup?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59854 - "GET /api/stockx/imports?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59878 - "POST /api/stockx/lookup-url HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59672 - "POST /api/stockx/lookup HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59672 - "GET /api/stockx/lookup?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59898 - "GET /api/stockx/imports?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59672 - "GET /api/products/barcode/194958241278 HTTP/1.1" 404 Not Found
+INFO:     192.168.0.252:59672 - "GET /api/products?search=194958241278&limit=20&offset=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59672 - "POST /api/stockx/lookup HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59898 - "GET /api/stockx/imports?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59914 - "GET /api/stockx/lookup?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59672 - "GET /api/stockx/imports?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59898 - "GET /api/stockx/lookup?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59932 - "GET /api/products/barcode/194954560113 HTTP/1.1" 404 Not Found
+INFO:     192.168.0.252:59932 - "GET /api/products?search=194954560113&limit=20&offset=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59936 - "GET /api/stockx/imports?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59938 - "GET /api/stockx/lookup?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59932 - "POST /api/stockx/lookup HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59932 - "GET /api/stockx/lookup?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.252:59966 - "GET /api/stockx/imports?limit=50&skip=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.16:54015 - "GET /api/public/purchase/3d94215b90254b0cbfe8b191d727fdb0 HTTP/1.1" 200 OK
+INFO:     192.168.0.16:60566 - "OPTIONS /api/dashboard/stats HTTP/1.1" 200 OK
+INFO:     192.168.0.16:60566 - "GET /api/dashboard/stats HTTP/1.1" 200 OK
+INFO:     192.168.0.16:60566 - "OPTIONS /api/inventory/summary HTTP/1.1" 200 OK
+INFO:     192.168.0.16:62783 - "OPTIONS /api/locations HTTP/1.1" 200 OK
+INFO:     192.168.0.16:60566 - "OPTIONS /api/collections HTTP/1.1" 200 OK
+INFO:     192.168.0.16:60566 - "GET /api/locations HTTP/1.1" 200 OK
+INFO:     192.168.0.16:57121 - "GET /api/collections HTTP/1.1" 200 OK
+INFO:     192.168.0.16:62783 - "GET /api/inventory/summary HTTP/1.1" 200 OK
+INFO:     192.168.0.16:57644 - "OPTIONS /api/products?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.16:64156 - "GET /api/collections HTTP/1.1" 200 OK
+INFO:     192.168.0.16:57644 - "GET /api/products?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     192.168.0.16:57644 - "OPTIONS /api/analytics/summary HTTP/1.1" 200 OK
+INFO:     192.168.0.16:64156 - "OPTIONS /api/sales?limit=200&offset=0&date=2026-02-05 HTTP/1.1" 200 OK
+INFO:     192.168.0.16:64156 - "GET /api/analytics/summary HTTP/1.1" 200 OK
+INFO:     192.168.0.16:57644 - "GET /api/sales?limit=200&offset=0&date=2026-02-05 HTTP/1.1" 200 OK
+INFO:     192.168.0.16:57644 - "OPTIONS /api/stall-items?status=in_stallo HTTP/1.1" 200 OK
+INFO:     192.168.0.16:53065 - "OPTIONS /api/shelves HTTP/1.1" 200 OK
+INFO:     192.168.0.16:54605 - "GET /api/locations HTTP/1.1" 200 OK
+INFO:     192.168.0.16:53065 - "GET /api/shelves HTTP/1.1" 200 OK
+INFO:     192.168.0.16:57644 - "GET /api/stall-items?status=in_stallo HTTP/1.1" 200 OK
+INFO:     192.168.0.16:64156 - "GET /api/inventory/summary HTTP/1.1" 200 OK
+INFO:     192.168.0.16:64156 - "OPTIONS /api/shopify/sync-status HTTP/1.1" 200 OK
+INFO:     192.168.0.16:57644 - "OPTIONS /api/shopify/inventory-sync-status HTTP/1.1" 200 OK
+INFO:     192.168.0.16:57644 - "GET /api/shopify/sync-status HTTP/1.1" 200 OK
+INFO:     192.168.0.16:53065 - "GET /api/locations HTTP/1.1" 200 OK
+INFO:     192.168.0.16:54605 - "GET /api/shelves HTTP/1.1" 200 OK
+INFO:     192.168.0.16:64156 - "GET /api/shopify/inventory-sync-status HTTP/1.1" 200 OK
+INFO:     192.168.0.16:59662 - "GET /api/collections HTTP/1.1" 200 OK
+INFO:     192.168.0.16:59662 - "OPTIONS /api/purchase-links HTTP/1.1" 200 OK
+INFO:     192.168.0.16:59662 - "GET /api/purchase-links HTTP/1.1" 200 OK
+INFO:     192.168.0.16:52211 - "GET /api/purchase-links/b1926cd9-f856-42a8-8e66-8d3c588c23b4/pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NGEwOTVmMC04MjM2LTRhMGItOTJiMS0xNDlmZDhkNDE1NGEiLCJleHAiOjE3NzA4MjEzNzl9.CZ08S3LFM_juAd4q8KudP1wLr7ZLIW5Gl_fmf4npkLA HTTP/1.1" 200 OK

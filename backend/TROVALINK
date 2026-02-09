@@ -1,0 +1,219 @@
+#!/usr/bin/env python3
+# FIND_STOCKX_SLUG_BY_BARCODE_KICKS.py
+#
+# Given a barcode (EAN-13 / UPC-12 / GTIN-14), finds the EXACT StockX product on KicksDB
+# and prints:
+#   - stockx_slug
+#   - stockx_link (https://stockx.com/<slug>)
+#   - kicks product id + title + sku (if available)
+#
+# How it works (robust, exact):
+#  1) Normalize input to digits only.
+#  2) Build candidate barcodes:
+#     - if UPC-12 -> also try EAN-13 with leading "0"
+#     - if EAN-13 starting with "0" -> also try UPC-12 without leading "0"
+#     - if GTIN-14 -> also try GTIN-13 (drop leading 0) and UPC-12 (if applicable)
+#  3) Call: GET https://api.kicks.dev/v3/stockx/products?filters=barcodes="...."
+#     and pick the result that actually contains the barcode in its `barcodes` array.
+#  4) Optional verify step: fetch full product + identifiers (if you enable VERIFY_IDENTIFIERS=1).
+#
+# REQUIRED ENV:
+#   KICKS_API_KEY
+#
+# OPTIONAL ENV:
+#   KICKS_MARKET=IT
+#   TIMEOUT=25
+#   TRIES=4
+#   BACKOFF=0.8
+#   VERIFY_IDENTIFIERS=0/1   (default 0; can cost more / may require paid identifiers)
+#   INPUT_FILE=barcodes.txt  (one barcode per line; if not set, uses CLI args)
+#
+# USAGE:
+#   python FIND_STOCKX_SLUG_BY_BARCODE_KICKS.py 4066761771593
+#   python FIND_STOCKX_SLUG_BY_BARCODE_KICKS.py 0196608223382
+#   INPUT_FILE=barcodes.txt python FIND_STOCKX_SLUG_BY_BARCODE_KICKS.py
+#
+import os
+import re
+import json
+import time
+import requests
+from urllib.parse import quote
+
+API_KEY = os.getenv("KICKS_API_KEY")
+if not API_KEY:
+    raise SystemExit("Missing env var: KICKS_API_KEY")
+
+MARKET = (os.getenv("KICKS_MARKET", "IT") or "IT").strip().upper()
+TIMEOUT = int(os.getenv("TIMEOUT", "25"))
+TRIES = int(os.getenv("TRIES", "4"))
+BACKOFF = float(os.getenv("BACKOFF", "0.8"))
+VERIFY_IDENTIFIERS = os.getenv("VERIFY_IDENTIFIERS", "0") == "1"
+INPUT_FILE = (os.getenv("INPUT_FILE", "") or "").strip()
+
+HEADERS = {"Authorization": f"Bearer {API_KEY}"}
+BASE = "https://api.kicks.dev/v3/stockx/products"
+
+def _digits_only(s: str) -> str:
+    return re.sub(r"\D+", "", (s or "").strip())
+
+def request_retry(method, url, *, headers=None, params=None, timeout=25, tries=4, backoff=0.8):
+    last = None
+    for i in range(tries):
+        try:
+            r = requests.request(method, url, headers=headers, params=params, timeout=timeout)
+            if r.status_code in (429, 500, 502, 503, 504):
+                time.sleep(backoff * (2 ** i))
+                last = r
+                continue
+            return r
+        except Exception as e:
+            last = e
+            time.sleep(backoff * (2 ** i))
+    if isinstance(last, requests.Response):
+        last.raise_for_status()
+    raise last
+
+def build_candidates(gtin_digits: str) -> list[str]:
+    """
+    Returns a de-duplicated ordered list of candidate barcode strings to try.
+    """
+    d = _digits_only(gtin_digits)
+    out = []
+    def add(x):
+        x = _digits_only(x)
+        if x and x not in out:
+            out.append(x)
+
+    add(d)
+
+    # UPC-12 -> EAN-13 by leading 0
+    if len(d) == 12:
+        add("0" + d)
+
+    # EAN-13 starting with 0 -> UPC-12 by dropping leading 0
+    if len(d) == 13 and d.startswith("0"):
+        add(d[1:])
+
+    # GTIN-14 often starts with 0; try dropping leading 0
+    if len(d) == 14 and d.startswith("0"):
+        add(d[1:])          # 13
+        if d[1:].startswith("0") and len(d[1:]) == 13:
+            add(d[2:])      # maybe 12 (rare)
+        if len(d[1:]) == 13 and d[1:].startswith("0"):
+            add(d[1:][1:])  # 12
+
+    # If 13 and starts with 0, we already added 12.
+    return out
+
+def search_by_barcode_filter(barcode: str, limit: int = 25) -> list[dict]:
+    # Kicks docs: filters use Meilisearch syntax; stockx index has "barcodes": ["string"]
+    # So we filter with barcodes = "...."
+    filters_expr = f'barcodes = "{barcode}"'
+    params = {
+        "filters": filters_expr,
+        "limit": limit,
+        "market": MARKET,
+    }
+    r = request_retry("GET", BASE, headers=HEADERS, params=params, timeout=TIMEOUT, tries=TRIES, backoff=BACKOFF)
+    if r.status_code in (401, 403):
+        raise SystemExit(f"Kicks auth failed (status={r.status_code}). Check KICKS_API_KEY.")
+    if r.status_code != 200:
+        raise RuntimeError(f"Search failed status={r.status_code} body={r.text[:500]}")
+    return (r.json() or {}).get("data") or []
+
+def fetch_full_product(slug_or_id: str) -> dict:
+    url = f"{BASE}/{slug_or_id}"
+    params = {"market": MARKET}
+    if VERIFY_IDENTIFIERS:
+        # identifiers are often paid-only; if your plan doesn't support, this may return null/empty identifiers
+        params.update({
+            "display[variants]": "true",
+            "display[identifiers]": "true",
+        })
+    r = request_retry("GET", url, headers=HEADERS, params=params, timeout=TIMEOUT, tries=TRIES, backoff=BACKOFF)
+    if r.status_code in (401, 403):
+        raise SystemExit(f"Kicks auth failed (status={r.status_code}). Check KICKS_API_KEY.")
+    if r.status_code != 200:
+        raise RuntimeError(f"Fetch failed status={r.status_code} body={r.text[:500]}")
+    return (r.json() or {}).get("data") or {}
+
+def pick_exact_match(results: list[dict], wanted: str) -> dict | None:
+    wanted = _digits_only(wanted)
+    if not results:
+        return None
+
+    # Prefer entries where barcodes contains the wanted code exactly.
+    exact = [p for p in results if wanted in [ _digits_only(x) for x in (p.get("barcodes") or []) ]]
+    if len(exact) == 1:
+        return exact[0]
+    if len(exact) > 1:
+        # If multiple (rare), prefer one where sku exists and not empty; else first.
+        exact.sort(key=lambda p: (0 if (p.get("sku") or "").strip() else 1, -(p.get("rank") or 0)))
+        return exact[0]
+
+    # If Kicks returned something but barcodes array not present, fallback to best-ranked.
+    results.sort(key=lambda p: (-(p.get("rank") or 0)))
+    return results[0]
+
+def resolve_one(input_code: str) -> dict:
+    raw = input_code.strip()
+    digits = _digits_only(raw)
+    if not digits or len(digits) < 8:
+        return {"input": raw, "status": "invalid_barcode"}
+
+    candidates = build_candidates(digits)
+
+    for c in candidates:
+        results = search_by_barcode_filter(c, limit=25)
+        if not results:
+            continue
+
+        picked = pick_exact_match(results, c)
+        if not picked:
+            continue
+
+        slug = (picked.get("slug") or "").strip()
+        link = (picked.get("link") or "").strip()  # usually already https://stockx.com/<slug>
+        if not link and slug:
+            link = f"https://stockx.com/{slug}"
+
+        out = {
+            "input": raw,
+            "normalized": digits,
+            "matched_barcode": c,
+            "status": "ok",
+            "slug": slug or None,
+            "link": link or None,
+            "kicks_id": picked.get("id"),
+            "title": picked.get("title"),
+            "sku": picked.get("sku"),
+        }
+
+        if VERIFY_IDENTIFIERS and (slug or picked.get("id")):
+            full = fetch_full_product(slug or picked["id"])
+            out["verified_title"] = full.get("title")
+            out["verified_sku"] = full.get("sku")
+            out["verified_link"] = full.get("link") or out["link"]
+
+        # “exact slug + exact link” is essentially stockx.com/<slug>
+        return out
+
+    return {"input": raw, "normalized": digits, "status": "not_found"}
+
+def read_inputs(argv: list[str]) -> list[str]:
+    if INPUT_FILE:
+        with open(INPUT_FILE, "r", encoding="utf-8") as f:
+            return [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
+    if len(argv) > 1:
+        return argv[1:]
+    raise SystemExit("No input provided. Pass barcodes as args or set INPUT_FILE=...")
+
+def main():
+    import sys
+    inputs = read_inputs(sys.argv)
+    results = [resolve_one(x) for x in inputs]
+    print(json.dumps({"market": MARKET, "count": len(results), "results": results}, ensure_ascii=False, indent=2))
+
+if __name__ == "__main__":
+    main()

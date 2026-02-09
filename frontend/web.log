@@ -1,0 +1,399 @@
+
+> frontend@1.0.0 web
+> expo start --web --port 19007
+
+env: load .env
+env: export EXPO_PUBLIC_BACKEND_URL EXPO_PUBLIC_WEB_URL EXPO_NO_DOCTOR
+Starting project at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend
+Starting Metro Bundler
+Waiting on http://localhost:19007
+Logs for your project will appear below.
+Web node_modules\expo-router\entry.js ▓▓▓▓▓░░░░░░░░░░░ 32.7% ( 23/132)
+λ node_modules\expo-router\node\render.js ▓░░░░░░░░░░░░░░░  6.3% ( 14/125)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓░░░░░░░░░░░ 32.7% ( 64/217)
+λ node_modules\expo-router\node\render.js ▓▓░░░░░░░░░░░░░░ 14.1% (123/327)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓░░░░░░░░░░░ 32.7% (199/383)
+λ node_modules\expo-router\node\render.js ▓▓░░░░░░░░░░░░░░ 17.9% (148/350)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓░░░░░░░░░ 44.6% (342/512)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓░░░░░░░░░ 45.1% (329/490)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓░░░░░░░░ 54.7% (437/591)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 65.9% (504/621)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 79.7% (692/775)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 75.3% (643/741)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 88.7% (856/909)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 89.1% (870/949)
+λ Bundled 26551ms node_modules\expo-router\node\render.js (1052 modules)
+Web Bundled 27270ms node_modules\expo-router\entry.js (972 modules)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.6% (970/972)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓░░░░░░░░░░ 43.1% (292/445)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓░░░░░ 73.1% (638/746)
+Web Bundled 9293ms node_modules\expo-router\entry.js (973 modules)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 436ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 2248ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 87ms node_modules\expo-router\entry.js (1 module)
+λ Bundled 60ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 565ms node_modules\expo-router\entry.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 49ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 696ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 74ms node_modules\expo-router\entry.js (1 module)
+λ Bundled 54ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 677ms node_modules\expo-router\entry.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 81ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 1014ms node_modules\expo-router\entry.js (1 module)
+λ Bundled 46ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 60ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 545ms node_modules\expo-router\entry.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 850ms node_modules\expo-router\node\render.js (1 module)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundled 3905ms node_modules\expo-router\entry.js (1 module)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 39ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 802ms node_modules\expo-router\entry.js (1 module)
+λ Bundled 29ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 75ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 786ms node_modules\expo-router\entry.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 133ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 1184ms node_modules\expo-router\entry.js (1 module)
+λ Bundled 111ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 43ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 655ms node_modules\expo-router\entry.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 1148ms node_modules\expo-router\node\render.js (1 module)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundled 4275ms node_modules\expo-router\entry.js (1 module)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 199ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 2068ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 94ms node_modules\expo-router\entry.js (1 module)
+λ Bundled 48ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 495ms node_modules\expo-router\entry.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 66ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 847ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 58ms node_modules\expo-router\entry.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 104ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 990ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 47ms node_modules\expo-router\entry.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+ ERROR  SyntaxError: C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\app\caricaprodottionline.tsx: Expecting Unicode escape sequence \uXXXX. (97:84)
+
+   95 |       loadHistory();
+   96 |     } catch (error: any) {
+>  97 |       const errMsg = error.response?.data?.detail || 'Errore durante importazione';\r\n              setImportStatus(errMsg);\r\n              Alert.alert('Errore', errMsg);
+      |                                                                                     ^
+   98 |     } finally {
+   99 |       setLookupLoading(false);
+  100 |     }
+    at constructor (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:365:19)
+    at TypeScriptParserMixin.raise (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6599:19)
+    at TypeScriptParserMixin.readWord1 (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6559:16)
+    at TypeScriptParserMixin.readWord (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6579:23)
+    at TypeScriptParserMixin.getTokenFromCode (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6298:14)
+    at TypeScriptParserMixin.getTokenFromCode (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:4797:11)
+    at TypeScriptParserMixin.getTokenFromCode (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9987:11)
+    at TypeScriptParserMixin.nextToken (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:5782:10)
+    at TypeScriptParserMixin.next (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:5692:10)
+    at TypeScriptParserMixin.eat (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:5696:12)
+    at TypeScriptParserMixin.isLineTerminator (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6891:17)
+    at TypeScriptParserMixin.semicolon (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6894:25)
+    at TypeScriptParserMixin.parseVarStatement (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13231:10)
+    at TypeScriptParserMixin.parseVarStatement (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9408:31)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12851:23)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9508:18)
+    at TypeScriptParserMixin.parseStatementLike (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12767:17)
+    at TypeScriptParserMixin.parseStatementListItem (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12747:17)
+    at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13316:61)
+    at TypeScriptParserMixin.parseBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13309:10)
+    at TypeScriptParserMixin.parseBlock (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13297:10)
+    at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13218:72
+    at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12403:14)
+    at TypeScriptParserMixin.parseTryStatement (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13218:26)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12804:21)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9508:18)
+    at TypeScriptParserMixin.parseStatementLike (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12767:17)
+    at TypeScriptParserMixin.parseStatementListItem (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12747:17)
+    at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13316:61)
+    at TypeScriptParserMixin.parseBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13309:10)
+    at TypeScriptParserMixin.parseBlock (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13297:10)
+    at TypeScriptParserMixin.parseFunctionBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12100:24)
+    at TypeScriptParserMixin.parseArrowExpression (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12075:10)
+    at TypeScriptParserMixin.parseAsyncArrowFromCallExpression (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11264:10)
+    at TypeScriptParserMixin.parseAsyncArrowFromCallExpression (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9766:18)
+    at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11194:27)
+    at TypeScriptParserMixin.parseSubscript (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11120:19)
+    at TypeScriptParserMixin.parseSubscript (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9272:18)
+    at TypeScriptParserMixin.parseSubscripts (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11094:19)
+    at TypeScriptParserMixin.parseExprSubscripts (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11085:17)
+    at TypeScriptParserMixin.parseUpdate (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11066:21)
+    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11046:23)
+    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9837:18)
+    at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10899:61)
+    at TypeScriptParserMixin.parseExprOps (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10904:23)
+    at TypeScriptParserMixin.parseMaybeConditional (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10881:23)
+    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10831:21)
+    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9786:20)
+    at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10800:39
+    at TypeScriptParserMixin.allowInAnd (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12421:16)
+ ERROR  SyntaxError: C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\app\caricaprodottionline.tsx: Expecting Unicode escape sequence \uXXXX. (97:84)
+
+   95 |       loadHistory();
+   96 |     } catch (error: any) {
+>  97 |       const errMsg = error.response?.data?.detail || 'Errore durante importazione';\r\n              setImportStatus(errMsg);\r\n              Alert.alert('Errore', errMsg);
+      |                                                                                     ^
+   98 |     } finally {
+   99 |       setLookupLoading(false);
+  100 |     }
+    at constructor (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:365:19)
+    at TypeScriptParserMixin.raise (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6599:19)
+    at TypeScriptParserMixin.readWord1 (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6559:16)
+    at TypeScriptParserMixin.readWord (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6579:23)
+    at TypeScriptParserMixin.getTokenFromCode (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6298:14)
+    at TypeScriptParserMixin.getTokenFromCode (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:4797:11)
+    at TypeScriptParserMixin.getTokenFromCode (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9987:11)
+    at TypeScriptParserMixin.nextToken (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:5782:10)
+    at TypeScriptParserMixin.next (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:5692:10)
+    at TypeScriptParserMixin.eat (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:5696:12)
+    at TypeScriptParserMixin.isLineTerminator (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6891:17)
+    at TypeScriptParserMixin.semicolon (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6894:25)
+    at TypeScriptParserMixin.parseVarStatement (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13231:10)
+    at TypeScriptParserMixin.parseVarStatement (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9408:31)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12851:23)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9508:18)
+    at TypeScriptParserMixin.parseStatementLike (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12767:17)
+    at TypeScriptParserMixin.parseStatementListItem (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12747:17)
+    at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13316:61)
+    at TypeScriptParserMixin.parseBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13309:10)
+    at TypeScriptParserMixin.parseBlock (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13297:10)
+    at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13218:72
+    at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12403:14)
+    at TypeScriptParserMixin.parseTryStatement (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13218:26)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12804:21)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9508:18)
+    at TypeScriptParserMixin.parseStatementLike (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12767:17)
+    at TypeScriptParserMixin.parseStatementListItem (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12747:17)
+    at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13316:61)
+    at TypeScriptParserMixin.parseBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13309:10)
+    at TypeScriptParserMixin.parseBlock (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13297:10)
+    at TypeScriptParserMixin.parseFunctionBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12100:24)
+    at TypeScriptParserMixin.parseArrowExpression (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12075:10)
+    at TypeScriptParserMixin.parseAsyncArrowFromCallExpression (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11264:10)
+    at TypeScriptParserMixin.parseAsyncArrowFromCallExpression (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9766:18)
+    at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11194:27)
+    at TypeScriptParserMixin.parseSubscript (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11120:19)
+    at TypeScriptParserMixin.parseSubscript (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9272:18)
+    at TypeScriptParserMixin.parseSubscripts (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11094:19)
+    at TypeScriptParserMixin.parseExprSubscripts (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11085:17)
+    at TypeScriptParserMixin.parseUpdate (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11066:21)
+    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11046:23)
+    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9837:18)
+    at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10899:61)
+    at TypeScriptParserMixin.parseExprOps (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10904:23)
+    at TypeScriptParserMixin.parseMaybeConditional (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10881:23)
+    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10831:21)
+    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9786:20)
+    at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10800:39
+    at TypeScriptParserMixin.allowInAnd (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12421:16)
+ ERROR  SyntaxError: C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\app\caricaprodottionline.tsx: Expecting Unicode escape sequence \uXXXX. (97:84)
+
+   95 |       loadHistory();
+   96 |     } catch (error: any) {
+>  97 |       const errMsg = error.response?.data?.detail || 'Errore durante importazione';\r\n              setImportStatus(errMsg);\r\n              Alert.alert('Errore', errMsg);
+      |                                                                                     ^
+   98 |     } finally {
+   99 |       setLookupLoading(false);
+  100 |     }
+    at constructor (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:365:19)
+    at TypeScriptParserMixin.raise (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6599:19)
+    at TypeScriptParserMixin.readWord1 (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6559:16)
+    at TypeScriptParserMixin.readWord (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6579:23)
+    at TypeScriptParserMixin.getTokenFromCode (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6298:14)
+    at TypeScriptParserMixin.getTokenFromCode (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:4797:11)
+    at TypeScriptParserMixin.getTokenFromCode (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9987:11)
+    at TypeScriptParserMixin.nextToken (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:5782:10)
+    at TypeScriptParserMixin.next (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:5692:10)
+    at TypeScriptParserMixin.eat (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:5696:12)
+    at TypeScriptParserMixin.isLineTerminator (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6891:17)
+    at TypeScriptParserMixin.semicolon (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6894:25)
+    at TypeScriptParserMixin.parseVarStatement (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13231:10)
+    at TypeScriptParserMixin.parseVarStatement (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9408:31)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12851:23)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9508:18)
+    at TypeScriptParserMixin.parseStatementLike (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12767:17)
+    at TypeScriptParserMixin.parseStatementListItem (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12747:17)
+    at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13316:61)
+    at TypeScriptParserMixin.parseBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13309:10)
+    at TypeScriptParserMixin.parseBlock (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13297:10)
+    at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13218:72
+    at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12403:14)
+    at TypeScriptParserMixin.parseTryStatement (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13218:26)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12804:21)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9508:18)
+    at TypeScriptParserMixin.parseStatementLike (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12767:17)
+    at TypeScriptParserMixin.parseStatementListItem (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12747:17)
+    at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13316:61)
+    at TypeScriptParserMixin.parseBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13309:10)
+    at TypeScriptParserMixin.parseBlock (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13297:10)
+    at TypeScriptParserMixin.parseFunctionBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12100:24)
+    at TypeScriptParserMixin.parseArrowExpression (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12075:10)
+    at TypeScriptParserMixin.parseAsyncArrowFromCallExpression (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11264:10)
+    at TypeScriptParserMixin.parseAsyncArrowFromCallExpression (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9766:18)
+    at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11194:27)
+    at TypeScriptParserMixin.parseSubscript (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11120:19)
+    at TypeScriptParserMixin.parseSubscript (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9272:18)
+    at TypeScriptParserMixin.parseSubscripts (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11094:19)
+    at TypeScriptParserMixin.parseExprSubscripts (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11085:17)
+    at TypeScriptParserMixin.parseUpdate (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11066:21)
+    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11046:23)
+    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9837:18)
+    at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10899:61)
+    at TypeScriptParserMixin.parseExprOps (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10904:23)
+    at TypeScriptParserMixin.parseMaybeConditional (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10881:23)
+    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10831:21)
+    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9786:20)
+    at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10800:39
+    at TypeScriptParserMixin.allowInAnd (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12421:16)
+ ERROR  SyntaxError: C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\app\caricaprodottionline.tsx: Expecting Unicode escape sequence \uXXXX. (97:84)
+
+   95 |       loadHistory();
+   96 |     } catch (error: any) {
+>  97 |       const errMsg = error.response?.data?.detail || 'Errore durante importazione';\r\n              setImportStatus(errMsg);\r\n              Alert.alert('Errore', errMsg);
+      |                                                                                     ^
+   98 |     } finally {
+   99 |       setLookupLoading(false);
+  100 |     }
+    at constructor (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:365:19)
+    at TypeScriptParserMixin.raise (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6599:19)
+    at TypeScriptParserMixin.readWord1 (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6559:16)
+    at TypeScriptParserMixin.readWord (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6579:23)
+    at TypeScriptParserMixin.getTokenFromCode (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6298:14)
+    at TypeScriptParserMixin.getTokenFromCode (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:4797:11)
+    at TypeScriptParserMixin.getTokenFromCode (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9987:11)
+    at TypeScriptParserMixin.nextToken (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:5782:10)
+    at TypeScriptParserMixin.next (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:5692:10)
+    at TypeScriptParserMixin.eat (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:5696:12)
+    at TypeScriptParserMixin.isLineTerminator (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6891:17)
+    at TypeScriptParserMixin.semicolon (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:6894:25)
+    at TypeScriptParserMixin.parseVarStatement (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13231:10)
+    at TypeScriptParserMixin.parseVarStatement (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9408:31)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12851:23)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9508:18)
+    at TypeScriptParserMixin.parseStatementLike (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12767:17)
+    at TypeScriptParserMixin.parseStatementListItem (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12747:17)
+    at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13316:61)
+    at TypeScriptParserMixin.parseBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13309:10)
+    at TypeScriptParserMixin.parseBlock (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13297:10)
+    at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13218:72
+    at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12403:14)
+    at TypeScriptParserMixin.parseTryStatement (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13218:26)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12804:21)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9508:18)
+    at TypeScriptParserMixin.parseStatementLike (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12767:17)
+    at TypeScriptParserMixin.parseStatementListItem (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12747:17)
+    at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13316:61)
+    at TypeScriptParserMixin.parseBlockBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13309:10)
+    at TypeScriptParserMixin.parseBlock (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:13297:10)
+    at TypeScriptParserMixin.parseFunctionBody (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12100:24)
+    at TypeScriptParserMixin.parseArrowExpression (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12075:10)
+    at TypeScriptParserMixin.parseAsyncArrowFromCallExpression (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11264:10)
+    at TypeScriptParserMixin.parseAsyncArrowFromCallExpression (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9766:18)
+    at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11194:27)
+    at TypeScriptParserMixin.parseSubscript (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11120:19)
+    at TypeScriptParserMixin.parseSubscript (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9272:18)
+    at TypeScriptParserMixin.parseSubscripts (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11094:19)
+    at TypeScriptParserMixin.parseExprSubscripts (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11085:17)
+    at TypeScriptParserMixin.parseUpdate (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11066:21)
+    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:11046:23)
+    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9837:18)
+    at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10899:61)
+    at TypeScriptParserMixin.parseExprOps (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10904:23)
+    at TypeScriptParserMixin.parseMaybeConditional (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10881:23)
+    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10831:21)
+    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:9786:20)
+    at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:10800:39
+    at TypeScriptParserMixin.allowInAnd (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\@babel\parser\lib\index.js:12421:16)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundling failed 21ms node_modules\expo-router\entry.js (1 module)
+λ Bundling failed 40ms node_modules\expo-router\node\render.js (1 module)
+
+Metro error: SyntaxError: C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\app\caricaprodottionline.tsx: Expecting Unicode escape sequence \uXXXX. (97:84)
+
+[0m [90m  95 |[39m       loadHistory()[33m;[39m
+ [90m  96 |[39m     } [36mcatch[39m (error[33m:[39m any) {
+[31m[1m>[22m[39m[90m  97 |[39m       [36mconst[39m errMsg [33m=[39m error[33m.[39mresponse[33m?[39m[33m.[39mdata[33m?[39m[33m.[39mdetail [33m||[39m [32m'Errore durante importazione'[39m[33m;[39m[37m[41m[1m\[22m[49m[39mr[37m[41m[1m\[22m[49m[39mn              setImportStatus(errMsg)[33m;[39m[37m[41m[1m\[22m[49m[39mr[37m[41m[1m\[22m[49m[39mn              [33mAlert[39m[33m.[39malert([32m'Errore'[39m[33m,[39m errMsg)[33m;[39m
+ [90m     |[39m                                                                                     [31m[1m^[22m[39m
+ [90m  98 |[39m     } [36mfinally[39m {
+ [90m  99 |[39m       setLookupLoading([36mfalse[39m)[33m;[39m
+ [90m 100 |[39m     }[0m
+
+Call Stack
+  <unknown> (app\caricaprodottionline.tsx)
+Web node_modules\expo-router\_error.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 75.1% (234/270)
+Web Bundled 4846ms node_modules\expo-router\_error.js (323 modules)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundling failed 13ms node_modules\expo-router\entry.js (1 module)
+
+Metro error: SyntaxError: C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\app\caricaprodottionline.tsx: Expecting Unicode escape sequence \uXXXX. (97:84)
+
+[0m [90m  95 |[39m       loadHistory()[33m;[39m
+ [90m  96 |[39m     } [36mcatch[39m (error[33m:[39m any) {
+[31m[1m>[22m[39m[90m  97 |[39m       [36mconst[39m errMsg [33m=[39m error[33m.[39mresponse[33m?[39m[33m.[39mdata[33m?[39m[33m.[39mdetail [33m||[39m [32m'Errore durante importazione'[39m[33m;[39m[37m[41m[1m\[22m[49m[39mr[37m[41m[1m\[22m[49m[39mn              setImportStatus(errMsg)[33m;[39m[37m[41m[1m\[22m[49m[39mr[37m[41m[1m\[22m[49m[39mn              [33mAlert[39m[33m.[39malert([32m'Errore'[39m[33m,[39m errMsg)[33m;[39m
+ [90m     |[39m                                                                                     [31m[1m^[22m[39m
+ [90m  98 |[39m     } [36mfinally[39m {
+ [90m  99 |[39m       setLookupLoading([36mfalse[39m)[33m;[39m
+ [90m 100 |[39m     }[0m
+
+Call Stack
+  <unknown> (app\caricaprodottionline.tsx)
+λ Bundling failed 26ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 17ms node_modules\expo-router\_error.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundling failed 57ms node_modules\expo-router\entry.js (1 module)
+
+Metro error: SyntaxError: C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\app\caricaprodottionline.tsx: Expecting Unicode escape sequence \uXXXX. (97:84)
+
+[0m [90m  95 |[39m       loadHistory()[33m;[39m
+ [90m  96 |[39m     } [36mcatch[39m (error[33m:[39m any) {
+[31m[1m>[22m[39m[90m  97 |[39m       [36mconst[39m errMsg [33m=[39m error[33m.[39mresponse[33m?[39m[33m.[39mdata[33m?[39m[33m.[39mdetail [33m||[39m [32m'Errore durante importazione'[39m[33m;[39m[37m[41m[1m\[22m[49m[39mr[37m[41m[1m\[22m[49m[39mn              setImportStatus(errMsg)[33m;[39m[37m[41m[1m\[22m[49m[39mr[37m[41m[1m\[22m[49m[39mn              [33mAlert[39m[33m.[39malert([32m'Errore'[39m[33m,[39m errMsg)[33m;[39m
+ [90m     |[39m                                                                                     [31m[1m^[22m[39m
+ [90m  98 |[39m     } [36mfinally[39m {
+ [90m  99 |[39m       setLookupLoading([36mfalse[39m)[33m;[39m
+ [90m 100 |[39m     }[0m
+
+Call Stack
+  <unknown> (app\caricaprodottionline.tsx)
+λ node_modules\expo-router\node\render.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundling failed 167ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 36ms node_modules\expo-router\_error.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundling failed 39ms node_modules\expo-router\entry.js (1 module)
+
+Metro error: SyntaxError: C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\app\caricaprodottionline.tsx: Expecting Unicode escape sequence \uXXXX. (97:84)
+
+[0m [90m  95 |[39m       loadHistory()[33m;[39m
+ [90m  96 |[39m     } [36mcatch[39m (error[33m:[39m any) {
+[31m[1m>[22m[39m[90m  97 |[39m       [36mconst[39m errMsg [33m=[39m error[33m.[39mresponse[33m?[39m[33m.[39mdata[33m?[39m[33m.[39mdetail [33m||[39m [32m'Errore durante importazione'[39m[33m;[39m[37m[41m[1m\[22m[49m[39mr[37m[41m[1m\[22m[49m[39mn              setImportStatus(errMsg)[33m;[39m[37m[41m[1m\[22m[49m[39mr[37m[41m[1m\[22m[49m[39mn              [33mAlert[39m[33m.[39malert([32m'Errore'[39m[33m,[39m errMsg)[33m;[39m
+ [90m     |[39m                                                                                     [31m[1m^[22m[39m
+ [90m  98 |[39m     } [36mfinally[39m {
+ [90m  99 |[39m       setLookupLoading([36mfalse[39m)[33m;[39m
+ [90m 100 |[39m     }[0m
+
+Call Stack
+  <unknown> (app\caricaprodottionline.tsx)
+λ Bundling failed 74ms node_modules\expo-router\node\render.js (1 module)

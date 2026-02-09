@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: gestionale_mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: gestionale_backend
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        EXPO_PUBLIC_BACKEND_URL: ${EXPO_PUBLIC_BACKEND_URL:-https://gestionale.sharkdrop.it}
+        EXPO_PUBLIC_WEB_URL: ${EXPO_PUBLIC_WEB_URL:-https://gestionale.sharkdrop.it}
+    container_name: gestionale_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  caddy:
+    image: caddy:2
+    container_name: gestionale_caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  mongo_data:
+  caddy_data:
+  caddy_config:

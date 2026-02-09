@@ -1,0 +1,20 @@
+The following packages should be updated for best compatibility with the installed expo version:
+  react-native-svg@15.15.2 - expected version: 15.12.1
+  react-native-worklets@0.5.2 - expected version: 0.5.1
+Your project may not work correctly until you install the expected versions of the packages.
+Error: Cannot pipe to a closed or destroyed stream
+    at pipelineImpl (node:internal/streams/pipeline:264:15)
+    at node:stream/promises:31:5
+    at new Promise (<anonymous>)
+    at pipeline (node:stream/promises:20:10)
+    at respond (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\expo-server\src\vendor\http.ts:138:19)
+    at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\expo-server\src\vendor\http.ts:68:13
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+Error: Cannot pipe to a closed or destroyed stream
+    at pipelineImpl (node:internal/streams/pipeline:264:15)
+    at node:stream/promises:31:5
+    at new Promise (<anonymous>)
+    at pipeline (node:stream/promises:20:10)
+    at respond (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\expo-server\src\vendor\http.ts:138:19)
+    at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\expo-server\src\vendor\http.ts:68:13
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)

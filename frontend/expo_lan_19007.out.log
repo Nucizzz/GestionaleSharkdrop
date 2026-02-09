@@ -1,0 +1,24 @@
+env: load .env
+env: export EXPO_PUBLIC_BACKEND_URL EXPO_PUBLIC_WEB_URL EXPO_NO_DOCTOR
+Starting project at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend
+Starting Metro Bundler
+Waiting on http://localhost:19007
+Logs for your project will appear below.
+Android node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Android Bundled 1965ms node_modules\expo-router\entry.js (1327 modules)
+ ERROR  [Error: Uncaught (in promise, id: 0) Error: Unable to activate keep awake] 
+
+Call Stack
+  construct (<native>)
+  apply (<native>)
+  _construct (node_modules\@babel\runtime\helpers\construct.js)
+  Wrapper (node_modules\@babel\runtime\helpers\wrapNativeSuper.js)
+  construct (<native>)
+  _callSuper (node_modules\@babel\runtime\helpers\callSuper.js)
+  constructor (node_modules\expo-modules-core\src\errors\CodedError.ts)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 1791ms node_modules\expo-router\node\render.js (1051 modules)
+Web Bundled 3478ms node_modules\expo-router\entry.js (939 modules)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 89.8% (890/939)
+Web Bundled 546ms node_modules\expo-router\entry.js (973 modules)
+ LOG  [web] Logs will appear in the browser console

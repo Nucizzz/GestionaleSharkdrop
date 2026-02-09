@@ -1,0 +1,16 @@
+.git
+.gitignore
+.emergent
+node_modules
+**/node_modules
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/.DS_Store
+test_reports
+tests
+memory
+frontend/expo*.log
+frontend/expo*.png
+frontend/.expo
+frontend/.expo-shared

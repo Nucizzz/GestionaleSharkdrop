@@ -1,0 +1,164 @@
+yarn run v1.22.22
+$ expo start --port 19007 --lan --clear
+env: load .env
+env: export EXPO_PUBLIC_BACKEND_URL EXPO_PUBLIC_WEB_URL EXPO_NO_DOCTOR
+Starting project at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend
+Starting Metro Bundler
+warning: Bundler cache is empty, rebuilding (this may take a minute)
+The following packages should be updated for best compatibility with the installed expo version:
+  react-native-svg@15.15.2 - expected version: 15.12.1
+  react-native-worklets@0.5.2 - expected version: 0.5.1
+Your project may not work correctly until you install the expected versions of the packages.
+Waiting on http://localhost:19007
+Logs for your project will appear below.
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ node_modules\expo-router\node\render.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ node_modules\expo-router\node\render.js ░░░░░░░░░░░░░░░░  1.0% (1/1)
+Web node_modules\expo-router\entry.js ▓▓▓▓░░░░░░░░░░░░ 27.2% (16/43)
+λ node_modules\expo-router\node\render.js ░░░░░░░░░░░░░░░░  5.5% ( 15/130)
+Web node_modules\expo-router\entry.js ▓▓▓▓░░░░░░░░░░░░ 27.2% (17/49)
+λ node_modules\expo-router\node\render.js ▓░░░░░░░░░░░░░░░ 11.4% ( 80/237)
+Web node_modules\expo-router\entry.js ▓▓▓▓░░░░░░░░░░░░ 27.2% (111/283)
+λ node_modules\expo-router\node\render.js ▓▓░░░░░░░░░░░░░░ 16.9% (141/343)
+Web node_modules\expo-router\entry.js ▓▓▓▓░░░░░░░░░░░░ 27.2% (111/283)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓░░░░░░░░░░░ 35.4% (265/457)
+Web node_modules\expo-router\entry.js ▓▓▓▓░░░░░░░░░░░░ 27.2% (175/361)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓░░░░░░░░░░ 43.7% (333/504)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓░░░░░░░░░░ 42.4% (282/433)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓▓▓░░░░░░░ 60.7% (423/551)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ node_modules\expo-router\node\render.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓░░░░░░░░░ 47.8% (383/554)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 65.6% (503/621)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ node_modules\expo-router\node\render.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓░░░░░░░░ 55.9% (445/595)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓▓▓▓▓░░░░░ 73.7% (594/714)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ node_modules\expo-router\node\render.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 66.3% (595/731)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 75.5% (664/764)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ node_modules\expo-router\node\render.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓░░░ 84.8% (732/795)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓▓▓▓▓▓▓░░░ 86.7% (776/836)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ node_modules\expo-router\node\render.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 87.5% (795/886)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 90.3% (885/949)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ node_modules\expo-router\node\render.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 94.2% (926/954)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 94.8% (970/998)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ node_modules\expo-router\node\render.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ node_modules\expo-router\node\render.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 49961ms node_modules\expo-router\node\render.js (1052 modules)
+λ Bundled 25275ms node_modules\expo-router\node\render.js (1 module)
+λ Bundled 5251ms node_modules\expo-router\node\render.js (1 module)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (972/972)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+
+Metro error: Platform is not defined
+
+Call Stack
+  factory (app\purchases.tsx)
+  Object.get [as ./purchases.tsx] (app)
+  contextModule (app)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (972/972)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+
+Metro error: Platform is not defined
+
+Call Stack
+  factory (app\purchases.tsx)
+  Object.get [as ./purchases.tsx] (app)
+  contextModule (app)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (972/972)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+
+Metro error: Platform is not defined
+
+Call Stack
+  factory (app\purchases.tsx)
+  Object.get [as ./purchases.tsx] (app)
+  contextModule (app)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (972/972)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Error: Cannot pipe to a closed or destroyed stream
+    at pipelineImpl (node:internal/streams/pipeline:264:15)
+    at node:stream/promises:31:5
+    at new Promise (<anonymous>)
+    at pipeline (node:stream/promises:20:10)
+    at respond (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\expo-server\src\vendor\http.ts:138:19)
+    at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\expo-server\src\vendor\http.ts:68:13
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+Error: Cannot pipe to a closed or destroyed stream
+    at pipelineImpl (node:internal/streams/pipeline:264:15)
+    at node:stream/promises:31:5
+    at new Promise (<anonymous>)
+    at pipeline (node:stream/promises:20:10)
+    at respond (C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\expo-server\src\vendor\http.ts:138:19)
+    at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend\node_modules\expo-server\src\vendor\http.ts:68:13
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+Web Bundled 52368ms node_modules\expo-router\entry.js (972 modules)
+Web Bundled 27613ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 7549ms node_modules\expo-router\entry.js (1 module)
+error Command failed with exit code 4294967295.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 217ms node_modules\expo-router\node\render.js (1 module)
+"shadow*" style props are deprecated. Use "boxShadow".
+Web Bundled 1770ms node_modules\expo-router\entry.js (1 module)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 45ms node_modules\expo-router\node\render.js (1 module)
+"shadow*" style props are deprecated. Use "boxShadow".
+Web Bundled 556ms node_modules\expo-router\entry.js (1 module)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 44ms node_modules\expo-router\node\render.js (1 module)
+"shadow*" style props are deprecated. Use "boxShadow".
+Web Bundled 563ms node_modules\expo-router\entry.js (1 module)
+λ Bundled 51ms node_modules\expo-router\node\render.js (1 module)
+"shadow*" style props are deprecated. Use "boxShadow".
+Web Bundled 492ms node_modules\expo-router\entry.js (1 module)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 63ms node_modules\expo-router\node\render.js (1 module)
+"shadow*" style props are deprecated. Use "boxShadow".
+Web Bundled 693ms node_modules\expo-router\entry.js (1 module)
+λ Bundled 30ms node_modules\expo-router\node\render.js (1 module)
+"shadow*" style props are deprecated. Use "boxShadow".
+Web Bundled 401ms node_modules\expo-router\entry.js (1 module)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓░░░░░░░░░░░ 34.6% (220/374)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 67.0% (536/660)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 98.2% (964/973)
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundled 9918ms node_modules\expo-router\entry.js (973 modules)
+Web Bundled 9266ms node_modules\expo-router\entry.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 32ms node_modules\expo-router\node\render.js (1 module)
+"shadow*" style props are deprecated. Use "boxShadow".
+Web Bundled 521ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 38ms node_modules\expo-router\entry.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 63ms node_modules\expo-router\node\render.js (1 module)
+"shadow*" style props are deprecated. Use "boxShadow".
+Web Bundled 946ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 52ms node_modules\expo-router\entry.js (1 module)
+ LOG  [web] Logs will appear in the browser console
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 42ms node_modules\expo-router\node\render.js (1 module)
+"shadow*" style props are deprecated. Use "boxShadow".
+Web Bundled 503ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 58ms node_modules\expo-router\entry.js (1 module)
+ LOG  [web] Logs will appear in the browser console

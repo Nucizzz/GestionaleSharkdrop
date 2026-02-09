@@ -1,0 +1,55 @@
+env: load .env
+env: export EXPO_PUBLIC_BACKEND_URL EXPO_PUBLIC_WEB_URL
+Starting project at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend
+Starting Metro Bundler
+warning: Bundler cache is empty, rebuilding (this may take a minute)
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓░░░░░░░░░░ 43.1% (353/538)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓▓░░░░░░░░ 54.5% (440/596)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 90.0% (887/935)
+λ node_modules\expo-router\node\render.js ▓▓▓▓▓▓▓▓▓▓▓▓▓░░░ 86.7% (854/917)
+λ Bundled 9108ms node_modules\expo-router\node\render.js (1052 modules)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.8% (971/972)
+Web Bundled 14440ms node_modules\expo-router\entry.js (972 modules)
+Web node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.8% (971/972)
+Android node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Android node_modules\expo-router\entry.js ▓░░░░░░░░░░░░░░░ 12.5% ( 49/246)
+Android node_modules\expo-router\entry.js ▓▓░░░░░░░░░░░░░░ 17.0% (175/428)
+Android node_modules\expo-router\entry.js ▓▓▓▓▓▓░░░░░░░░░░ 38.6% (471/760)
+Android node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓░░░░░░░░ 51.6% (683/955)
+Android node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 78.5% ( 911/1028)
+Android node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 89.7% (1151/1235)
+Android Bundled 23925ms node_modules\expo-router\entry.js (1327 modules)
+ LOG  Camera ready
+ LOG  Barcode scanned: 194954560113 Type: upc_a
+ LOG  Camera ready
+ LOG  Camera ready
+ LOG  Camera ready
+Web node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 39ms node_modules\expo-router\node\render.js (1 module)
+Web Bundled 1139ms node_modules\expo-router\entry.js (1 module)
+Web Bundled 1172ms node_modules\expo-router\entry.js (973 modules)
+ LOG  [web] Logs will appear in the browser console
+Android node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Android Bundled 456ms node_modules\expo-router\entry.js (1 module)
+ LOG  Camera ready
+ LOG  Barcode scanned: 194954560113 Type: upc_a
+ LOG  Camera ready
+ LOG  Camera ready
+ LOG  Camera ready
+Android node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Android Bundled 476ms node_modules\expo-router\entry.js (1 module)
+ LOG  Camera ready
+ LOG  Barcode scanned: 194954560113 Type: upc_a
+ LOG  Camera ready
+ LOG  Camera ready
+ LOG  Camera ready
+ LOG  Camera ready
+ LOG  Camera ready
+ LOG  Barcode scanned: 194958241278 Type: upc_a
+ LOG  Camera ready
+ LOG  Camera ready
+ LOG  Camera ready
+ LOG  Camera ready

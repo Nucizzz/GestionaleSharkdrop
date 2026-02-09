@@ -1,0 +1,12 @@
+INFO:     Started server process [20564]
+INFO:     Waiting for application startup.
+2026-02-03 17:34:36,854 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "C:\Users\jnuci\AppData\Local\Programs\Python\Python313\Lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2026-02-03 17:40:26,071 - backend.server - INFO - ACTION: ActionType.STALL_CREATE by admin - Stallo: 1x Adidas Samba OG Sporty & Rich USA
+2026-02-03 17:40:42,817 - backend.server - INFO - ACTION: ActionType.STALL_RETURN by admin - Stallo rientrato: 1x

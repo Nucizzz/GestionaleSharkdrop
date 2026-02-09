@@ -1,0 +1,16 @@
+env: load .env
+env: export EXPO_PUBLIC_BACKEND_URL
+Starting project at C:\Users\jnuci\OneDrive\Documenti\GitHub\GESTIONALENUOVO\frontend
+Starting Metro Bundler
+warning: Bundler cache is empty, rebuilding (this may take a minute)
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+Android node_modules\expo-router\entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Android node_modules\expo-router\entry.js ▓░░░░░░░░░░░░░░░  9.0% ( 8/27)
+Android node_modules\expo-router\entry.js ▓▓▓░░░░░░░░░░░░░ 21.5% (148/319)
+Android node_modules\expo-router\entry.js ▓▓▓▓▓▓░░░░░░░░░░ 38.7% (367/621)
+Android node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓░░░░░░░ 58.2% (550/721)
+Android node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 63.5% (652/820)
+Android node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 75.3% ( 853/1001)
+Android node_modules\expo-router\entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 97.5% (1109/1140)
+Android Bundled 26537ms node_modules\expo-router\entry.js (1210 modules)

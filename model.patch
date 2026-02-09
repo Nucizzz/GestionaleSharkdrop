@@ -1,0 +1,57 @@
+diff --git a/frontend/app/(tabs)/settings.tsx b/frontend/app/(tabs)/settings.tsx
+index f227d2b..4d82c99 100644
+--- a/frontend/app/(tabs)/settings.tsx
++++ b/frontend/app/(tabs)/settings.tsx
+@@ -107,7 +107,7 @@ export default function SettingsScreen() {
+   const handleSyncCollections = async () => {
+     Alert.alert(
+       'Sincronizza Collections',
+-      'Vuoi importare le collezioni da Shopify? Prima sincronizza i prodotti.',
++      'Vuoi sincronizzare le collections da Shopify?',
+       [
+         { text: 'Annulla', style: 'cancel' },
+         {
+@@ -115,8 +115,8 @@ export default function SettingsScreen() {
+           onPress: async () => {
+             setSyncingCollections(true);
+             try {
+-              const result = await api.syncShopifyCollections();
+-              Alert.alert('Successo', result.message);
++              await api.syncShopifyCollections();
++              Alert.alert('Successo', 'Collections sincronizzate');
+               loadData();
+             } catch (error: any) {
+               Alert.alert('Errore', error.response?.data?.detail || 'Errore durante la sincronizzazione');
+@@ -129,6 +129,32 @@ export default function SettingsScreen() {
+     );
+   };
+ 
++  const handleSyncInventory = async () => {
++    Alert.alert(
++      '⚠️ Sincronizza Inventario da Shopify',
++      'ATTENZIONE: Questa operazione cancellerà TUTTO l\'inventario locale e importerà le quantità da Shopify.\n\nI dati delle varianti con quantity > 0 verranno importati.\n\nContinuare?',
++      [
++        { text: 'Annulla', style: 'cancel' },
++        {
++          text: 'Sì, Sincronizza',
++          style: 'destructive',
++          onPress: async () => {
++            setSyncing(true);
++            try {
++              const result = await api.syncInventoryFromShopify();
++              Alert.alert('Successo', result.message || `Inventario sincronizzato: ${result.items_imported} items importati`);
++              loadData();
++            } catch (error: any) {
++              Alert.alert('Errore', error.response?.data?.detail || 'Errore durante la sincronizzazione inventario');
++            } finally {
++              setSyncing(false);
++            }
++          },
++        },
++      ]
++    );
++  };
++
+   const openExportModal = (format: 'excel' | 'pdf') => {
+     setExportFormat(format);
+     setSelectedLocation(null);

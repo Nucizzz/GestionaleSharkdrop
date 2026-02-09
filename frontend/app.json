@@ -1,0 +1,80 @@
+{
+  "expo": {
+    "name": "SHARKDROP",
+    "slug": "sharkdrop",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/logo-padded.png",
+    "scheme": "sharkdrop",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sharkdrop.wms",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Scansiona barcode prodotti e scaffali",
+        "NSPhotoLibraryUsageDescription": "Salva foto dei prodotti"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/logo-padded.png",
+        "backgroundColor": "#000000"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.sharkdrop.wms",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.VIBRATE",
+        "android.permission.FLASHLIGHT"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png",
+      "name": "SHARKDROP",
+      "shortName": "SHARKDROP",
+      "themeColor": "#000000",
+      "backgroundColor": "#eef2f7",
+      "display": "standalone"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c93217c4-b2e9-4e95-a413-c04a358282ba",
+      "fallbackToCacheTimeout": 0
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Consenti a SharkDrop di accedere alla fotocamera per scansionare barcode",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./LOGOSHARKDROP.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#000000"
+        }
+      ],
+      "expo-font",
+      "expo-web-browser"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c93217c4-b2e9-4e95-a413-c04a358282ba"
+      }
+    }
+  }
+}
