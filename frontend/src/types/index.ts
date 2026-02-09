@@ -57,6 +57,7 @@ export interface InventoryLevel {
   product_image?: string;
   variant_title?: string;
   variant_barcode?: string;
+  variant_upc_backup?: string;
   location_name?: string;
   shelf_name?: string;
 }
@@ -78,6 +79,7 @@ export interface InventoryTransaction {
   product_title?: string;
   variant_title?: string;
   variant_barcode?: string;
+  variant_upc_backup?: string;
 }
 
 export interface SyncStatus {
@@ -112,6 +114,7 @@ export interface StallItem {
   product_title?: string;
   variant_title?: string;
   variant_barcode?: string;
+  variant_upc_backup?: string;
   from_location_name?: string;
   from_shelf_name?: string;
   to_location_name?: string;

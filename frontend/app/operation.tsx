@@ -431,7 +431,10 @@ export default function OperationScreen() {
                 {selectedVariant && (
                   <>
                     <Text style={styles.variantTitle}>{selectedVariant.title}</Text>
-                    <Text style={styles.variantBarcode}>{selectedVariant.barcode}</Text>
+                      <Text style={styles.variantBarcode}>{selectedVariant.barcode}</Text>
+                      {selectedVariant.upc_backup && selectedVariant.upc_backup !== selectedVariant.barcode && (
+                        <Text style={styles.variantBarcodeSecondary}>UPC backup: {selectedVariant.upc_backup}</Text>
+                      )}
                   </>
                 )}
               </View>
@@ -868,6 +871,12 @@ const styles = StyleSheet.create({
   variantBarcode: {
     fontSize: 11,
     color: '#999',
+    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
+    marginTop: 2,
+  },
+  variantBarcodeSecondary: {
+    fontSize: 11,
+    color: '#6b7280',
     fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
     marginTop: 2,
   },

@@ -2287,6 +2287,7 @@ async def get_inventory_summary(
             "product_image": (product.get("image_base64") or product.get("image_url")) if product else None,
             "variant_title": variant.get("title") if variant else None,
             "variant_barcode": variant.get("barcode") if variant else None,
+            "variant_upc_backup": variant.get("upc_backup") if variant else None,
             "variant_sku": variant.get("sku") if variant else None,
             "location_name": location.get("name") if location else None,
             "shelf_name": shelf.get("name") if shelf else None
@@ -2676,6 +2677,7 @@ async def get_stall_items(
             "product_title": product.get("title") if product else None,
             "variant_title": variant.get("title") if variant else None,
             "variant_barcode": variant.get("barcode") if variant else None,
+            "variant_upc_backup": variant.get("upc_backup") if variant else None,
             "from_location_name": from_loc.get("name") if from_loc else None,
             "from_shelf_name": from_shelf.get("name") if from_shelf else None,
             "to_location_name": to_loc.get("name") if to_loc else None,
@@ -2894,7 +2896,8 @@ async def get_transactions(
             **tx,
             "product_title": product.get("title") if product else None,
             "variant_title": variant.get("title") if variant else None,
-            "variant_barcode": variant.get("barcode") if variant else None
+            "variant_barcode": variant.get("barcode") if variant else None,
+            "variant_upc_backup": variant.get("upc_backup") if variant else None
         })
     
     return {
@@ -4375,6 +4378,7 @@ async def _build_inventory_export_rows(
         product_title = product.get("title") if product else inv.get("product_title") or f"Unknown ({inv.get('variant_id')})"
         variant_title = (variant.get("title") if variant else None) or inv.get("variant_title")
         barcode = (variant.get("barcode") if variant else None) or inv.get("variant_barcode")
+        upc_backup = (variant.get("upc_backup") if variant else None) or inv.get("variant_upc_backup")
         sku = (variant.get("sku") if variant else None) or inv.get("variant_sku")
         price = (variant.get("price") if variant else None) or inv.get("variant_price") or 0
         product_image = (product.get("image_base64") or product.get("image_url")) if product else inv.get("product_image")
@@ -4391,7 +4395,7 @@ async def _build_inventory_export_rows(
             if size_l not in vt:
                 continue
         if search_l:
-            hay = f"{product_title} {variant_title or ''} {barcode or ''} {sku or ''}".lower()
+            hay = f"{product_title} {variant_title or ''} {barcode or ''} {upc_backup or ''} {sku or ''}".lower()
             if search_l not in hay:
                 continue
 
@@ -4400,6 +4404,7 @@ async def _build_inventory_export_rows(
             "product_title": product_title,
             "variant_title": variant_title,
             "barcode": barcode,
+            "upc_backup": upc_backup,
             "sku": sku,
             "price": price,
             "location_name": location.get("name") if location else "",

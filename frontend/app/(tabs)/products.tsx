@@ -62,7 +62,7 @@ export default function ProductsScreen() {
     if (!search.trim()) return true;
     const q = search.trim().toLowerCase();
     const tokens = q.split(/\s+/).filter(Boolean);
-    const hay = `${p.title || ''} ${(p.variants || []).map(v => `${v.title} ${v.barcode || ''} ${v.sku || ''}`).join(' ')}`.toLowerCase();
+    const hay = `${p.title || ''} ${(p.variants || []).map(v => `${v.title} ${v.barcode || ''} ${v.upc_backup || ''} ${v.sku || ''}`).join(' ')}`.toLowerCase();
     const allTokens = tokens.every(t => hay.includes(t));
     if (allTokens) return true;
     const compactHay = hay.replace(/[^a-z0-9]/g, '');

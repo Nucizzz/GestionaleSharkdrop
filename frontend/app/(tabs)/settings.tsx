@@ -67,7 +67,7 @@ export default function SettingsScreen() {
     if (exportSearch.trim()) {
       const q = exportSearch.trim().toLowerCase();
       data = data.filter((i: any) => {
-        const hay = `${i.product_title || ''} ${i.variant_title || ''} ${i.variant_barcode || ''} ${i.variant_sku || ''}`.toLowerCase();
+        const hay = `${i.product_title || ''} ${i.variant_title || ''} ${i.variant_barcode || ''} ${i.variant_upc_backup || ''} ${i.variant_sku || ''}`.toLowerCase();
         return hay.includes(q);
       });
     }

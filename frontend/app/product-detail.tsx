@@ -258,6 +258,12 @@ export default function ProductDetailScreen() {
                     <Text style={styles.detailText}>{variant.barcode}</Text>
                   </View>
                 )}
+                {variant.upc_backup && variant.upc_backup !== variant.barcode && (
+                  <View style={styles.detailRow}>
+                    <Ionicons name="barcode-outline" size={14} color="#666" />
+                    <Text style={styles.detailText}>UPC backup: {variant.upc_backup}</Text>
+                  </View>
+                )}
                 {variant.sku && (
                   <View style={styles.detailRow}>
                     <Ionicons name="pricetag-outline" size={14} color="#666" />

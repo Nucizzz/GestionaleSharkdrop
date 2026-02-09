@@ -65,7 +65,7 @@ export default function InventoryScreen() {
     }
     if (searchQuery.trim()) {
       const q = searchQuery.trim().toLowerCase();
-      const hay = `${item.product_title || ''} ${item.variant_title || ''} ${item.variant_barcode || ''} ${item.variant_sku || ''}`.toLowerCase();
+      const hay = `${item.product_title || ''} ${item.variant_title || ''} ${item.variant_barcode || ''} ${item.variant_upc_backup || ''} ${item.variant_sku || ''}`.toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;

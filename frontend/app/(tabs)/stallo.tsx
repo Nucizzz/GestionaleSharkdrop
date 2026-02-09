@@ -65,7 +65,7 @@ export default function StalloScreen() {
     if (!q) return inventory;
     const tokens = q.split(/\s+/).filter(Boolean);
     return inventory.filter((item) => {
-      const hay = `${item.product_title || ''} ${item.variant_title || ''} ${item.variant_barcode || ''}`.toLowerCase();
+      const hay = `${item.product_title || ''} ${item.variant_title || ''} ${item.variant_barcode || ''} ${item.variant_upc_backup || ''}`.toLowerCase();
       return tokens.every((t) => hay.includes(t));
     });
   }, [inventory, searchQuery]);

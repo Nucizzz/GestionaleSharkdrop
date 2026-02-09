@@ -31,6 +31,7 @@ export function ProductCard({
   const title = product?.title || inventory?.product_title || 'Prodotto';
   const variantTitle = variant?.title || inventory?.variant_title;
   const barcode = variant?.barcode || inventory?.variant_barcode;
+  const upcBackup = variant?.upc_backup || inventory?.variant_upc_backup;
   const quantity = inventory?.quantity;
   const showActions = Boolean(onEditProduct || onReceive || onSale || onMove || onStall);
 
@@ -54,6 +55,9 @@ export function ProductCard({
           <Text style={styles.title} numberOfLines={2}>{title}</Text>
           {variantTitle && <Text style={styles.variant}>{variantTitle}</Text>}
           {barcode && <Text style={styles.barcode}>{barcode}</Text>}
+          {upcBackup && upcBackup !== barcode && (
+            <Text style={styles.barcodeSecondary}>UPC backup: {upcBackup}</Text>
+          )}
           {inventory?.location_name && (
             <Text style={styles.location}>
               {inventory.location_name}{inventory.shelf_name ? ` / ${inventory.shelf_name}` : ''}
@@ -151,6 +155,12 @@ const styles = StyleSheet.create({
   barcode: {
     fontSize: 11,
     color: '#999',
+    marginTop: 2,
+    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
+  },
+  barcodeSecondary: {
+    fontSize: 11,
+    color: '#6b7280',
     marginTop: 2,
     fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
   },
