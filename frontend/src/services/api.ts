@@ -12,11 +12,19 @@ const getRuntimeApiUrl = () => {
 };
 
 const isWeb = typeof window !== 'undefined' && !!window.location?.hostname;
-const API_URL = isWeb
+const normalizeApiBase = (value: string) => {
+  const trimmed = (value || '').trim().replace(/\/+$/, '');
+  if (!trimmed) return '';
+  return trimmed.endsWith('/api') ? trimmed.slice(0, -4) : trimmed;
+};
+
+const RAW_API_URL = isWeb
   ? ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
       ? getRuntimeApiUrl()
       : (process.env.EXPO_PUBLIC_BACKEND_URL || getRuntimeApiUrl()))
   : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
+
+const API_URL = normalizeApiBase(RAW_API_URL);
 
 export const getPublicWebBaseUrl = () => {
   if (typeof window !== 'undefined' && window.location?.origin) {
