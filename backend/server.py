@@ -2983,6 +2983,71 @@ async def run_shopify_sync(mode: str, current_user: dict):
                     data = response.json()
                     products = data.get("products", [])
 
+                    async def fetch_variant_upc_backup_map(product_id: str) -> dict[str, str]:
+                        """Fetch UPC backup metafield for all variants in a product via GraphQL (batched)."""
+                        gql_url = f"https://{shop_domain}/admin/api/{api_version}/graphql.json"
+                        query = """
+                        query($id: ID!, $cursor: String, $ns: String!, $key: String!) {
+                          product(id: $id) {
+                            variants(first: 100, after: $cursor) {
+                              edges {
+                                cursor
+                                node {
+                                  id
+                                  metafield(namespace: $ns, key: $key) { value }
+                                }
+                              }
+                              pageInfo { hasNextPage }
+                            }
+                          }
+                        }
+                        """
+                        out: dict[str, str] = {}
+                        cursor = None
+                        for attempt in range(6):
+                            try:
+                                while True:
+                                    variables = {
+                                        "id": f"gid://shopify/Product/{product_id}",
+                                        "cursor": cursor,
+                                        "ns": UPC_BACKUP_NAMESPACE,
+                                        "key": UPC_BACKUP_KEY,
+                                    }
+                                    gresp = await client.post(gql_url, headers=headers, json={"query": query, "variables": variables})
+                                    if gresp.status_code in (429, 500, 502, 503, 504):
+                                        await asyncio.sleep(1.2 * (2 ** attempt))
+                                        continue
+                                    data = gresp.json() if gresp.status_code == 200 else None
+                                    if not data or data.get("errors"):
+                                        # throttle or other error
+                                        await asyncio.sleep(1.2 * (2 ** attempt))
+                                        if attempt >= 5:
+                                            return out
+                                        break
+                                    product = (data.get("data") or {}).get("product") or {}
+                                    variants = (product.get("variants") or {})
+                                    edges = variants.get("edges") or []
+                                    for edge in edges:
+                                        node = edge.get("node") or {}
+                                        gid = node.get("id") or ""
+                                        # gid://shopify/ProductVariant/{id}
+                                        m = re.search(r"/ProductVariant/(\\d+)$", gid)
+                                        if not m:
+                                            continue
+                                        vid = m.group(1)
+                                        mf = node.get("metafield") or {}
+                                        val = mf.get("value")
+                                        if val is not None:
+                                            digits = re.sub(r"\\D+", "", str(val))
+                                            out[vid] = digits or str(val).strip()
+                                    if not variants.get("pageInfo", {}).get("hasNextPage"):
+                                        return out
+                                    cursor = edges[-1].get("cursor")
+                                    await asyncio.sleep(0.2)
+                            except Exception:
+                                await asyncio.sleep(1.2 * (2 ** attempt))
+                        return out
+
                     for shopify_product in products:
                         shopify_id = str(shopify_product["id"])
                         if mode == "new" and shopify_id in existing_ids:
@@ -2998,27 +3063,8 @@ async def run_shopify_sync(mode: str, current_user: dict):
                             if image_url:
                                 image_base64 = await download_image_as_base64(image_url)
 
-                        # Create variants + fetch UPC backup metafields
-                        variant_ids = [str(v.get("id")) for v in shopify_product.get("variants", []) if v.get("id")]
-                        upc_backup_map: dict[str, str] = {}
-                        for variant_id in variant_ids:
-                            url = (
-                                f"https://{shop_domain}/admin/api/{api_version}/variants/{variant_id}"
-                                f"/metafields.json?namespace={UPC_BACKUP_NAMESPACE}&key={UPC_BACKUP_KEY}"
-                            )
-                            try:
-                                mf_resp = await client.get(url, headers=headers)
-                                if mf_resp.status_code == 200:
-                                    mfs = (mf_resp.json() or {}).get("metafields") or []
-                                    if mfs:
-                                        val = mfs[0].get("value")
-                                        if val is not None:
-                                            digits = re.sub(r"\\D+", "", str(val))
-                                            upc_backup_map[variant_id] = digits or str(val).strip()
-                            except Exception:
-                                # Ignore metafield failures; do not block sync
-                                pass
-                            await asyncio.sleep(0.02)
+                        # Create variants + fetch UPC backup metafields (batched GraphQL)
+                        upc_backup_map = await fetch_variant_upc_backup_map(shopify_id)
 
                         # Create variants
                         variants = []
