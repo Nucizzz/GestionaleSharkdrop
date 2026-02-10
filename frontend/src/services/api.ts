@@ -26,6 +26,8 @@ const RAW_API_URL = isWeb
 
 const API_URL = normalizeApiBase(RAW_API_URL);
 
+export const getApiBaseUrl = () => API_URL;
+
 export const getPublicWebBaseUrl = () => {
   if (typeof window !== 'undefined' && window.location?.origin) {
     return window.location.origin.replace(/\/+$/, '');

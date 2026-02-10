@@ -4,10 +4,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '../../src/store/authStore';
-import { api } from '../../src/services/api';
+import { api, getApiBaseUrl } from '../../src/services/api';
 import { Button } from '../../src/components/Button';
 import { Location, Shelf, SyncStatus } from '../../src/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
 
 interface Collection {
   id: string;
@@ -437,6 +438,25 @@ export default function SettingsScreen() {
     return new Date(dateStr).toLocaleString('it-IT');
   };
 
+  const handleClearCache = async () => {
+    alertProxy(
+      'Svuota Cache',
+      'Vuoi svuotare la cache locale e ricaricare i dati? Potresti dover rifare il login.',
+      [
+        { text: 'Annulla', style: 'cancel' },
+        {
+          text: 'Svuota',
+          style: 'destructive',
+          onPress: async () => {
+            await AsyncStorage.clear();
+            await loadData();
+            alertProxy('Cache svuotata', 'Riapri la pagina prodotti per ricaricare tutto.');
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
@@ -720,6 +740,33 @@ export default function SettingsScreen() {
           </View>
         )}
 
+        {/* App Info */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Info App</Text>
+          <View style={styles.card}>
+            <Text style={styles.infoLine}>
+              Versione: {Constants.expoConfig?.version || Constants.nativeAppVersion || 'n/a'}
+            </Text>
+            <Text style={styles.infoLine}>
+              Build: {String(Constants.expoConfig?.android?.versionCode || Constants.nativeBuildVersion || 'n/a')}
+            </Text>
+            <Text style={styles.infoLine}>
+              Runtime: {String(Constants.runtimeVersion || Constants.expoConfig?.runtimeVersion || 'n/a')}
+            </Text>
+            <Text style={styles.infoLine}>
+              Backend: {getApiBaseUrl() || 'n/a'}
+            </Text>
+            <Text style={styles.infoLine}>
+              Project ID: {Constants.expoConfig?.extra?.eas?.projectId || 'n/a'}
+            </Text>
+            <TouchableOpacity style={styles.menuItem} onPress={handleClearCache}>
+              <Ionicons name="trash-outline" size={22} color="#ef4444" />
+              <Text style={styles.menuItemText}>Svuota cache locale</Text>
+              <Ionicons name="chevron-forward" size={20} color="#999" />
+            </TouchableOpacity>
+          </View>
+        </View>
+
         {/* Logout */}
         <View style={styles.section}>
           <Button
@@ -958,6 +1005,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
     marginLeft: 12,
+  },
+  infoLine: {
+    fontSize: 13,
+    color: '#111',
+    marginBottom: 6,
   },
   userRow: {
     flexDirection: 'row',
