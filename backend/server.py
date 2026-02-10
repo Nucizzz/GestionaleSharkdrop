@@ -3051,6 +3051,33 @@ async def run_shopify_sync(mode: str, current_user: dict):
                                 await asyncio.sleep(1.2 * (2 ** attempt))
                         return out
 
+                    async def fetch_variant_upc_backup_rest(variant_id: str) -> Optional[str]:
+                        """Fallback: fetch UPC backup metafield for a single variant via REST."""
+                        url = f"https://{shop_domain}/admin/api/{api_version}/variants/{variant_id}/metafields.json"
+                        for attempt in range(4):
+                            try:
+                                r = await client.get(url, headers=headers)
+                                if r.status_code in (429, 500, 502, 503, 504):
+                                    await asyncio.sleep(2.0 * (2 ** attempt))
+                                    continue
+                                if r.status_code != 200:
+                                    return None
+                                mfs = (r.json() or {}).get("metafields") or []
+                                for mf in mfs:
+                                    if mf.get("namespace") == UPC_BACKUP_NAMESPACE and mf.get("key") == UPC_BACKUP_KEY:
+                                        raw = mf.get("value")
+                                        if raw is None:
+                                            return None
+                                        digits = re.sub(r"\D+", "", str(raw))
+                                        return digits or str(raw).strip()
+                                return None
+                            except Exception:
+                                await asyncio.sleep(2.0 * (2 ** attempt))
+                            finally:
+                                # Shopify REST rate limit: keep under ~2 req/sec
+                                await asyncio.sleep(0.65)
+                        return None
+
                     for shopify_product in products:
                         shopify_id = str(shopify_product["id"])
                         if mode == "new" and shopify_id in existing_ids:
@@ -3073,6 +3100,9 @@ async def run_shopify_sync(mode: str, current_user: dict):
                         variants = []
                         for shopify_variant in shopify_product.get("variants", []):
                             v_id = str(shopify_variant.get("id"))
+                            upc_backup = upc_backup_map.get(v_id)
+                            if not upc_backup:
+                                upc_backup = await fetch_variant_upc_backup_rest(v_id)
                             variants.append({
                               "id": str(uuid.uuid4()),
                               "shopify_variant_id": v_id,
@@ -3080,7 +3110,7 @@ async def run_shopify_sync(mode: str, current_user: dict):
                               "title": shopify_variant.get("title", "Default"),
                               "sku": shopify_variant.get("sku"),
                               "barcode": shopify_variant.get("barcode"),
-                              "upc_backup": upc_backup_map.get(v_id),
+                              "upc_backup": upc_backup,
                               "price": float(shopify_variant.get("price", 0)) if shopify_variant.get("price") else 0,
                               "inventory_item_id": str(shopify_variant.get("inventory_item_id")) if shopify_variant.get("inventory_item_id") else None,
                               "inventory_management": shopify_variant.get("inventory_management"),
@@ -3146,6 +3176,8 @@ async def run_shopify_sync(mode: str, current_user: dict):
                             products_created += 1
 
                         products_synced += 1
+                        # Throttle between products to avoid Shopify API rate limits
+                        await asyncio.sleep(0.4)
 
                     await db.shopify_sync_state.update_one(
                         {},
