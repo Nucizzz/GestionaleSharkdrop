@@ -18,6 +18,7 @@ from enum import Enum
 import base64
 from io import BytesIO
 import re
+import hashlib
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image as XLImage
 from openpyxl.styles import Font, Alignment, Border, Side
@@ -32,6 +33,7 @@ from urllib.parse import unquote, urlparse, parse_qs
 import aiohttp
 import subprocess
 import sys
+from PIL import Image
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -51,6 +53,34 @@ def clean_doc(doc):
 def clean_docs(docs):
     """Remove MongoDB _id field from list of documents"""
     return [clean_doc(doc) for doc in docs]
+
+def _normalize_identity_str(value: Optional[str]) -> str:
+    if value is None:
+        return ""
+    return re.sub(r"\s+", " ", str(value).strip().upper())
+
+def _build_identity_key(data: dict) -> str:
+    fiscal = _normalize_identity_str(data.get("fiscal_code"))
+    if fiscal:
+        return f"FISCAL:{fiscal}"
+    # Fallback: use full name only (one identity per exact name)
+    first_name = _normalize_identity_str(data.get("first_name"))
+    last_name = _normalize_identity_str(data.get("last_name"))
+    full_name = " ".join([p for p in [first_name, last_name] if p]).strip()
+    if full_name:
+        return f"NAME:{full_name}"
+    # Last resort: stable hash from core identity fields (should be rare)
+    parts = [
+        first_name,
+        last_name,
+        _normalize_identity_str(data.get("birth_date")),
+        _normalize_identity_str(data.get("birth_place")),
+        _normalize_identity_str(data.get("birth_country")),
+        _normalize_identity_str(data.get("residence_city")),
+    ]
+    raw = "|".join(parts)
+    digest = hashlib.sha1(raw.encode("utf-8")).hexdigest()
+    return f"HASH:{digest}"
 
 # JWT Settings
 SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'sharkdrop-super-secret-key-change-in-production')
@@ -1022,6 +1052,12 @@ class LocalProductCreate(BaseModel):
     barcode: Optional[str] = None
     variants: List[LocalVariantCreate] = []  # Empty = single product, non-empty = with sizes
 
+class ShopifyPushRequest(BaseModel):
+    product_id: str
+    used_tag: Optional[bool] = False
+    extra_tags: Optional[str] = None
+    keep_photo_bg: Optional[bool] = False
+
 # ==================== PURCHASE FROM SUPPLIER MODELS ====================
 
 class PurchaseItemCreate(BaseModel):
@@ -1036,6 +1072,7 @@ class PurchaseLinkCreate(BaseModel):
     items: List[PurchaseItemCreate]
     note: Optional[str] = None
     doc_type: Optional[str] = "acquisto"  # acquisto|contovendita
+    identity_id: Optional[str] = None
 
 class SupplierData(BaseModel):
     first_name: str
@@ -1054,6 +1091,16 @@ class SupplierData(BaseModel):
     phone: Optional[str] = None
     email: Optional[str] = None
 
+class SupplierIdentity(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    identity_key: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    last_used_at: datetime = Field(default_factory=datetime.utcnow)
+    source_link_id: Optional[str] = None
+    source_doc_type: Optional[str] = None
+    data: dict
+
 class PurchaseLink(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     token: str = Field(default_factory=lambda: str(uuid.uuid4()).replace("-", ""))
@@ -1068,6 +1115,7 @@ class PurchaseLink(BaseModel):
     supplier_data: Optional[dict] = None
     submitted_at: Optional[datetime] = None
     doc_type: str = "acquisto"  # acquisto|contovendita
+    identity_id: Optional[str] = None
 
 # ==================== AUTH HELPERS ====================
 
@@ -1927,7 +1975,8 @@ async def _run_stockx_import_job(job_id: str, env_overrides: dict, current_user:
         if v is not None:
             env[k] = str(v)
 
-    cmd = [sys.executable, str(ROOT_DIR / "IMPORTAPRODOTTISTOCKX.PY")]
+    # Use Nike-first importer for "carica prodotti online"
+    cmd = [sys.executable, str(ROOT_DIR / "CARICAPRODOTTI.PY")]
     try:
         result = await asyncio.to_thread(
             subprocess.run,
@@ -2923,6 +2972,112 @@ async def download_image_as_base64(url: str) -> Optional[str]:
         logger.error(f"Error downloading image: {e}")
     return None
 
+# ==================== IMAGE HELPERS (Local -> Shopify) ====================
+def _strip_data_url_prefix(data_url: str) -> str:
+    if not data_url:
+        return ""
+    if data_url.startswith("data:"):
+        return data_url.split(",", 1)[1]
+    return data_url
+
+def _prepare_shopify_image_attachment(
+    image_base64: str,
+    *,
+    keep_photo_bg: bool,
+    canvas_w: int = 1065,
+    canvas_h: int = 1440,
+    bg_hex: str = "#f5f5f3",
+) -> Optional[str]:
+    """
+    Resize image to Shopify-friendly canvas.
+    - keep_photo_bg=True: keep original photo background (no gray removal)
+    - keep_photo_bg=False: place on gray background
+    Returns base64 (no data: prefix) for Shopify 'attachment'.
+    """
+    if not image_base64:
+        return None
+    try:
+        raw = base64.b64decode(_strip_data_url_prefix(image_base64))
+        img = Image.open(BytesIO(raw)).convert("RGBA")
+        iw, ih = img.size
+        if iw <= 0 or ih <= 0:
+            return None
+
+        scale = min(canvas_w / iw, canvas_h / ih)
+        new_w = max(1, int(iw * scale))
+        new_h = max(1, int(ih * scale))
+        resized = img.resize((new_w, new_h), Image.LANCZOS)
+
+        bg_color = "#ffffff" if keep_photo_bg else bg_hex
+        bg_color = bg_color.lstrip("#")
+        if len(bg_color) == 6:
+            r, g, b = int(bg_color[0:2], 16), int(bg_color[2:4], 16), int(bg_color[4:6], 16)
+        else:
+            r, g, b = (245, 245, 243)
+
+        canvas = Image.new("RGBA", (canvas_w, canvas_h), (r, g, b, 255))
+        x = (canvas_w - new_w) // 2
+        y = (canvas_h - new_h) // 2
+        canvas.alpha_composite(resized, (x, y))
+
+        out = BytesIO()
+        canvas.convert("RGB").save(out, format="JPEG", quality=92, optimize=True)
+        return base64.b64encode(out.getvalue()).decode("utf-8")
+    except Exception as exc:
+        logger.error(f"Image prepare failed: {exc}")
+        return None
+
+async def _get_shopify_primary_location_id(shop_domain: str, access_token: str, api_version: str) -> Optional[int]:
+    headers = {
+        "X-Shopify-Access-Token": access_token,
+        "Content-Type": "application/json"
+    }
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        locations_url = f"https://{shop_domain}/admin/api/{api_version}/locations.json"
+        loc_response = await client.get(locations_url, headers=headers)
+        if loc_response.status_code != 200:
+            return None
+        shopify_locations = loc_response.json().get("locations", [])
+        warehouse_location_id = None
+        for loc in shopify_locations:
+            if "warehouse" in loc.get("name", "").lower():
+                warehouse_location_id = loc["id"]
+                break
+        if not warehouse_location_id and shopify_locations:
+            warehouse_location_id = shopify_locations[0]["id"]
+        return warehouse_location_id
+
+async def _match_shopify_variant_for_local(product: dict, variant: dict) -> Optional[dict]:
+    """Try to match local variant to Shopify variant by barcode/upc_backup/sku."""
+    barcode = (variant.get("barcode") or "").strip()
+    sku = (variant.get("sku") or "").strip()
+    if not barcode and not sku:
+        return None
+
+    or_clauses = []
+    if barcode:
+        or_clauses.append({"variants.barcode": barcode})
+        or_clauses.append({"variants.upc_backup": barcode})
+    if sku:
+        or_clauses.append({"variants.sku": sku})
+
+    if not or_clauses:
+        return None
+
+    match = await db.products.find_one(
+        {"shopify_product_id": {"$ne": None}, "$or": or_clauses},
+        {"_id": 0}
+    )
+    if not match:
+        return None
+
+    for v in match.get("variants", []):
+        if barcode and (v.get("barcode") == barcode or v.get("upc_backup") == barcode):
+            return {"product": match, "variant": v}
+        if sku and v.get("sku") == sku:
+            return {"product": match, "variant": v}
+    return None
+
 @api_router.post("/shopify/sync")
 async def sync_shopify_products(current_user: dict = Depends(require_admin)):
     """AGGIORNA TUTTI I PRODOTTI - Avvia sync in background (READ ONLY)"""
@@ -3773,14 +3928,40 @@ async def update_shopify_inventory(variant_id: str, quantity_change: int, curren
             return False
         
         shopify_variant_id = None
+        local_variant = None
         for v in product.get("variants", []):
             if v.get("id") == variant_id:
                 shopify_variant_id = v.get("shopify_variant_id")
+                local_variant = v
                 break
         
         if not shopify_variant_id:
-            logger.warning(f"No Shopify variant ID for variant {variant_id}")
-            return False
+            # Try to auto-link local variant to Shopify by barcode/upc_backup/sku
+            if local_variant:
+                match = await _match_shopify_variant_for_local(product, local_variant)
+                if match:
+                    shopify_product = match["product"]
+                    shopify_variant = match["variant"]
+                    shopify_variant_id = shopify_variant.get("shopify_variant_id")
+                    # Update local product/variant link
+                    await db.products.update_one(
+                        {"id": product.get("id"), "variants.id": variant_id},
+                        {"$set": {
+                            "shopify_product_id": shopify_product.get("shopify_product_id"),
+                            "updated_at": datetime.utcnow(),
+                            "variants.$.shopify_variant_id": shopify_variant_id,
+                            "variants.$.inventory_item_id": shopify_variant.get("inventory_item_id"),
+                            "variants.$.inventory_management": shopify_variant.get("inventory_management"),
+                            "variants.$.inventory_quantity": shopify_variant.get("inventory_quantity"),
+                        }}
+                    )
+                    logger.info(f"Auto-linked local variant {variant_id} to Shopify variant {shopify_variant_id}")
+                else:
+                    logger.warning(f"No Shopify variant ID for variant {variant_id}")
+                    return False
+            else:
+                logger.warning(f"No Shopify variant ID for variant {variant_id}")
+                return False
         
         headers = {
             "X-Shopify-Access-Token": access_token,
@@ -3801,24 +3982,9 @@ async def update_shopify_inventory(variant_id: str, quantity_change: int, curren
             if not inventory_item_id:
                 return False
             
-            # Get locations
-            locations_url = f"https://{shop_domain}/admin/api/{api_version}/locations.json"
-            loc_response = await client.get(locations_url, headers=headers)
-            
-            if loc_response.status_code != 200:
-                return False
-            
-            shopify_locations = loc_response.json().get("locations", [])
-            warehouse_location_id = None
-            
-            for loc in shopify_locations:
-                if "warehouse" in loc.get("name", "").lower():
-                    warehouse_location_id = loc["id"]
-                    break
-            
-            if not warehouse_location_id and shopify_locations:
-                warehouse_location_id = shopify_locations[0]["id"]
-            
+            warehouse_location_id = await _get_shopify_primary_location_id(
+                shop_domain, access_token, api_version
+            )
             if not warehouse_location_id:
                 return False
             
@@ -3950,6 +4116,169 @@ async def get_local_products(current_user: dict = Depends(get_current_user)):
     ).to_list(1000)
     return products
 
+# ==================== SHOPIFY PUSH (Local -> Shopify) ====================
+
+@api_router.post("/shopify/push-product")
+async def push_local_product_to_shopify(data: ShopifyPushRequest, current_user: dict = Depends(require_admin)):
+    """Push a local product to Shopify (create if missing)."""
+    shop_domain, access_token, api_version = get_shopify_config()
+    if not shop_domain or not access_token:
+        raise HTTPException(status_code=400, detail="Credenziali Shopify non configurate")
+
+    product = await db.products.find_one({"id": data.product_id}, {"_id": 0})
+    if not product:
+        raise HTTPException(status_code=404, detail="Prodotto non trovato")
+    if product.get("shopify_product_id"):
+        return {"status": "already_synced", "shopify_product_id": product.get("shopify_product_id")}
+
+    variants = product.get("variants") or []
+    if not variants:
+        raise HTTPException(status_code=400, detail="Prodotto senza varianti")
+
+    # Build tags
+    tags = [t for t in (product.get("tags") or []) if str(t).strip()]
+    if data.used_tag:
+        tags.append("used")
+    if data.extra_tags:
+        tags.extend([t.strip() for t in str(data.extra_tags).split(",") if t.strip()])
+    tags = list(dict.fromkeys(tags))  # unique preserve order
+
+    # Build image attachment
+    images = []
+    if product.get("image_base64"):
+        attachment = _prepare_shopify_image_attachment(
+            product.get("image_base64"),
+            keep_photo_bg=bool(data.keep_photo_bg or data.used_tag),
+        )
+        if attachment:
+            images.append({"attachment": attachment})
+    elif product.get("image_url"):
+        images.append({"src": product.get("image_url")})
+
+    option_name = "Taglia" if len(variants) > 1 else "Titolo"
+    shopify_variants = []
+    for v in variants:
+        shopify_variants.append({
+            "option1": v.get("title") or "Default",
+            "price": str(v.get("price", 0)),
+            "sku": v.get("sku"),
+            "barcode": v.get("barcode"),
+            "inventory_management": "shopify",
+            "inventory_policy": "continue",
+            "requires_shipping": True,
+            "grams": 2000
+        })
+
+    payload = {
+        "product": {
+            "title": product.get("title"),
+            "tags": ", ".join(tags),
+            "status": "active",
+            "product_type": product.get("product_type") or "Prodotto",
+            "options": [{"name": option_name}],
+            "variants": shopify_variants,
+            "images": images
+        }
+    }
+
+    headers = {
+        "X-Shopify-Access-Token": access_token,
+        "Content-Type": "application/json"
+    }
+
+    async with httpx.AsyncClient(timeout=60.0) as client:
+        create_url = f"https://{shop_domain}/admin/api/{api_version}/products.json"
+        create_response = await client.post(create_url, headers=headers, json=payload)
+        if create_response.status_code not in (200, 201):
+            logger.error(f"Shopify create failed: {create_response.text}")
+            raise HTTPException(status_code=400, detail="Errore creazione prodotto su Shopify")
+
+        created = create_response.json().get("product") or {}
+        shopify_product_id = str(created.get("id"))
+        shopify_variants_resp = created.get("variants") or []
+
+        # Map local variants to Shopify variants
+        updates = {}
+        for sv in shopify_variants_resp:
+            sv_id = str(sv.get("id"))
+            sv_barcode = (sv.get("barcode") or "").strip()
+            sv_sku = (sv.get("sku") or "").strip()
+            sv_title = (sv.get("title") or "").strip()
+            match_local = None
+            for lv in variants:
+                if sv_barcode and lv.get("barcode") == sv_barcode:
+                    match_local = lv
+                    break
+                if sv_sku and lv.get("sku") == sv_sku:
+                    match_local = lv
+                    break
+                if sv_title and (lv.get("title") or "").strip() == sv_title:
+                    match_local = lv
+                    break
+            if match_local:
+                updates[match_local["id"]] = {
+                    "shopify_variant_id": sv_id,
+                    "inventory_item_id": str(sv.get("inventory_item_id")) if sv.get("inventory_item_id") else None,
+                    "inventory_management": sv.get("inventory_management"),
+                    "inventory_quantity": sv.get("inventory_quantity"),
+                }
+
+        # Update local product with Shopify IDs
+        if updates:
+            for vid, patch in updates.items():
+                await db.products.update_one(
+                    {"id": product["id"], "variants.id": vid},
+                    {"$set": {
+                        "shopify_product_id": shopify_product_id,
+                        "updated_at": datetime.utcnow(),
+                        "variants.$.shopify_variant_id": patch.get("shopify_variant_id"),
+                        "variants.$.inventory_item_id": patch.get("inventory_item_id"),
+                        "variants.$.inventory_management": patch.get("inventory_management"),
+                        "variants.$.inventory_quantity": patch.get("inventory_quantity"),
+                    }}
+                )
+        else:
+            await db.products.update_one(
+                {"id": product["id"]},
+                {"$set": {"shopify_product_id": shopify_product_id, "updated_at": datetime.utcnow()}}
+            )
+
+        # Set Shopify inventory to match local quantities
+        location_id = await _get_shopify_primary_location_id(shop_domain, access_token, api_version)
+        if location_id:
+            for lv in variants:
+                patch = updates.get(lv["id"])
+                inv_item_id = patch.get("inventory_item_id") if patch else None
+                if not inv_item_id:
+                    continue
+                qty = 0
+                inv = await db.inventory_levels.find_one(
+                    {"variant_id": lv["id"]}, {"_id": 0, "quantity": 1}
+                )
+                if inv:
+                    qty = int(inv.get("quantity", 0))
+                set_url = f"https://{shop_domain}/admin/api/{api_version}/inventory_levels/set.json"
+                await client.post(
+                    set_url,
+                    headers=headers,
+                    json={
+                        "location_id": location_id,
+                        "inventory_item_id": int(inv_item_id),
+                        "available": int(qty)
+                    }
+                )
+
+    await log_action(
+        ActionType.SHOPIFY_UPDATE,
+        current_user,
+        f"Push prodotto locale su Shopify: {product.get('title')}",
+        entity_type="product",
+        entity_id=product.get("id"),
+        new_data={"shopify_product_id": shopify_product_id, "used_tag": data.used_tag}
+    )
+
+    return {"status": "created", "shopify_product_id": shopify_product_id}
+
 # ==================== PURCHASE LINKS (Acquisto da Fornitore) ====================
 
 @api_router.post("/purchase-links")
@@ -3962,6 +4291,13 @@ async def create_purchase_link(data: PurchaseLinkCreate, current_user: dict = De
     # Calculate total
     total = 0.0 if doc_type == "contovendita" else sum(item.purchase_price * item.quantity for item in data.items)
     
+    identity_id = None
+    if data.identity_id:
+        identity = await db.purchase_identities.find_one({"id": data.identity_id}, {"_id": 0})
+        if not identity:
+            raise HTTPException(status_code=400, detail="Identità non trovata")
+        identity_id = identity.get("id")
+
     # Create link with 2 days expiration
     purchase_link = PurchaseLink(
         items=[item.dict() for item in data.items],
@@ -3970,7 +4306,8 @@ async def create_purchase_link(data: PurchaseLinkCreate, current_user: dict = De
         created_by=current_user["id"],
         created_by_username=current_user["username"],
         expires_at=datetime.utcnow() + timedelta(days=2),
-        doc_type=doc_type
+        doc_type=doc_type,
+        identity_id=identity_id
     )
     
     await db.purchase_links.insert_one(purchase_link.dict())
@@ -4037,6 +4374,35 @@ async def delete_purchase_link(link_id: str, current_user: dict = Depends(get_cu
         raise HTTPException(status_code=404, detail="Purchase link not found")
     return {"message": "Purchase link deleted"}
 
+# ==================== PURCHASE IDENTITIES ====================
+@api_router.get("/purchase-identities")
+async def list_purchase_identities(
+    q: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 100,
+    current_user: dict = Depends(require_admin),
+):
+    query: dict = {}
+    if q:
+        qn = re.escape(q.strip())
+        query["$or"] = [
+            {"data.first_name": {"$regex": qn, "$options": "i"}},
+            {"data.last_name": {"$regex": qn, "$options": "i"}},
+            {"data.fiscal_code": {"$regex": qn, "$options": "i"}},
+            {"data.phone": {"$regex": qn, "$options": "i"}},
+            {"data.email": {"$regex": qn, "$options": "i"}},
+        ]
+    items = await db.purchase_identities.find(query, {"_id": 0}).sort("last_used_at", -1).skip(skip).limit(limit).to_list(limit)
+    total = await db.purchase_identities.count_documents(query)
+    return {"items": items, "total": total, "skip": skip, "limit": limit}
+
+@api_router.get("/purchase-identities/{identity_id}")
+async def get_purchase_identity(identity_id: str, current_user: dict = Depends(require_admin)):
+    identity = await db.purchase_identities.find_one({"id": identity_id}, {"_id": 0})
+    if not identity:
+        raise HTTPException(status_code=404, detail="Identity not found")
+    return identity
+
 # PUBLIC ENDPOINTS (no auth required) for suppliers
 
 @api_router.get("/public/purchase/{token}")
@@ -4069,6 +4435,12 @@ async def get_public_purchase_link(token: str):
                 enriched["product_image"] = product.get("image_base64") or product.get("image_url")
         enriched_items.append(enriched)
 
+    identity_data = None
+    if link.get("identity_id"):
+        identity = await db.purchase_identities.find_one({"id": link["identity_id"]}, {"_id": 0})
+        if identity and identity.get("data"):
+            identity_data = identity["data"]
+
     # Return safe data for public view
     return {
         "id": link["id"],
@@ -4078,7 +4450,8 @@ async def get_public_purchase_link(token: str):
         "created_at": link["created_at"],
         "expires_at": link["expires_at"],
         "status": link["status"],
-        "doc_type": link.get("doc_type", "acquisto")
+        "doc_type": link.get("doc_type", "acquisto"),
+        "identity": identity_data
     }
 
 @api_router.post("/public/purchase/{token}/submit")
@@ -4134,6 +4507,39 @@ async def submit_supplier_data(token: str, supplier_data: SupplierData):
                 "submitted_at": datetime.utcnow()
             }
         }
+    )
+
+    # Save/Upsert supplier identity for reuse
+    identity_data = supplier_data.dict(exclude_none=True)
+    identity_key = _build_identity_key(identity_data)
+    now = datetime.utcnow()
+    identity_doc = {
+        "id": str(uuid.uuid4()),
+        "identity_key": identity_key,
+        "created_at": now,
+        "updated_at": now,
+        "last_used_at": now,
+        "source_link_id": link.get("id"),
+        "source_doc_type": doc_type,
+        "data": identity_data,
+    }
+    await db.purchase_identities.update_one(
+        {"identity_key": identity_key},
+        {
+            "$set": {
+                "updated_at": now,
+                "last_used_at": now,
+                "source_link_id": link.get("id"),
+                "source_doc_type": doc_type,
+                "data": identity_data,
+            },
+            "$setOnInsert": {
+                "id": identity_doc["id"],
+                "created_at": now,
+                "identity_key": identity_key,
+            },
+        },
+        upsert=True,
     )
     
     return {"message": "Dati inviati con successo. Grazie!"}
@@ -5002,6 +5408,8 @@ async def startup_db_client():
     await db.stockx_lookups.create_index("barcode")
     await db.stockx_import_jobs.create_index("created_at")
     await db.stockx_import_jobs.create_index("status")
+    await db.purchase_identities.create_index("identity_key", unique=True)
+    await db.purchase_identities.create_index("last_used_at")
     
     # Create or update default admin
     admin = await db.users.find_one({"username": "admin"})

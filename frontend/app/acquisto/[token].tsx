@@ -24,9 +24,27 @@ interface PublicPurchaseLink {
   expires_at: string;
   status: string;
   doc_type?: 'acquisto' | 'contovendita';
+  identity?: Partial<SupplierIdentityData>;
   error?: string;
   expired?: boolean;
   already_submitted?: boolean;
+}
+
+interface SupplierIdentityData {
+  first_name?: string;
+  last_name?: string;
+  birth_date?: string;
+  birth_place?: string;
+  birth_country?: string;
+  residence_address?: string;
+  residence_city?: string;
+  residence_province?: string;
+  residence_cap?: string;
+  residence_country?: string;
+  fiscal_code?: string;
+  iban?: string;
+  phone?: string;
+  email?: string;
 }
 
 interface Stroke {
@@ -114,6 +132,41 @@ export default function PublicPurchaseScreen() {
     };
     run();
   }, [token]);
+
+  useEffect(() => {
+    if (!data?.identity) return;
+    const d = data.identity || {};
+    if (!firstName && d.first_name) setFirstName(d.first_name);
+    if (!lastName && d.last_name) setLastName(d.last_name);
+    if (!birthDate && d.birth_date) setBirthDate(d.birth_date);
+    if (!birthPlace && d.birth_place) setBirthPlace(d.birth_place);
+    if (!birthCountry && d.birth_country) setBirthCountry(d.birth_country);
+    if (!residenceAddress && d.residence_address) setResidenceAddress(d.residence_address);
+    if (!residenceCity && d.residence_city) setResidenceCity(d.residence_city);
+    if (!residenceProvince && d.residence_province) setResidenceProvince(d.residence_province);
+    if (!residenceCap && d.residence_cap) setResidenceCap(d.residence_cap);
+    if (!residenceCountry && d.residence_country) setResidenceCountry(d.residence_country);
+    if (!fiscalCode && d.fiscal_code) setFiscalCode(d.fiscal_code);
+    if (!iban && d.iban) setIban(d.iban);
+    if (!phone && d.phone) setPhone(d.phone);
+    if (!email && d.email) setEmail(d.email);
+  }, [
+    data,
+    firstName,
+    lastName,
+    birthDate,
+    birthPlace,
+    birthCountry,
+    residenceAddress,
+    residenceCity,
+    residenceProvince,
+    residenceCap,
+    residenceCountry,
+    fiscalCode,
+    iban,
+    phone,
+    email,
+  ]);
 
   const totalItems = useMemo(() => data?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0, [data]);
   const docType = data?.doc_type || 'acquisto';

@@ -21,6 +21,16 @@
       "android": {
         "buildType": "app-bundle"
       }
+    },
+    "production-apk": {
+      "env": {
+        "EXPO_PUBLIC_BACKEND_URL": "https://gestionale.sharkdrop.it",
+        "EXPO_PUBLIC_WEB_URL": "https://gestionale.sharkdrop.it"
+      },
+      "channel": "production",
+      "android": {
+        "buildType": "apk"
+      }
     }
   }
 }

@@ -516,10 +516,26 @@ export default function SettingsScreen() {
               <Text style={styles.menuItemText}>Acquisti da Fornitore</Text>
               <Ionicons name="chevron-forward" size={20} color="#999" />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.menuItem}
-              onPress={() => router.push('/create-product')}
-            >
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => router.push('/identita')}
+              >
+                <Ionicons name="id-card-outline" size={22} color="#0f766e" />
+                <Text style={styles.menuItemText}>Identita Fornitori</Text>
+                <Ionicons name="chevron-forward" size={20} color="#999" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => router.push('/local-products')}
+              >
+                <Ionicons name="cloud-upload-outline" size={22} color="#111827" />
+                <Text style={styles.menuItemText}>Prodotti Locali (Push Shopify)</Text>
+                <Ionicons name="chevron-forward" size={20} color="#999" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => router.push('/create-product')}
+              >
               <Ionicons name="add-circle-outline" size={22} color="#3b82f6" />
               <Text style={styles.menuItemText}>Crea Prodotto Locale</Text>
               <Ionicons name="chevron-forward" size={20} color="#999" />

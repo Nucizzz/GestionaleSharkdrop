@@ -137,8 +137,11 @@ NIKE_MARKETPLACE_PREF = env_pick("NIKE_MARKETPLACE_PREF", default="US").upper()
 NIKE_LANGUAGE_PREF = env_pick("NIKE_LANGUAGE_PREF", default="en")
 NIKE_MARKETPLACE_FALLBACK = env_pick("NIKE_MARKETPLACE_FALLBACK", default="IT").upper()
 NIKE_LANGUAGE_FALLBACK = env_pick("NIKE_LANGUAGE_FALLBACK", default="it")
+NIKE_MARKETPLACE_ALT = env_pick("NIKE_MARKETPLACE_ALT", default="GB").upper()
+NIKE_LANGUAGE_ALT = env_pick("NIKE_LANGUAGE_ALT", default="en")
 NIKE_CHANNEL_ID = env_pick("NIKE_CHANNEL_ID", default="d9a5bc42-4b9c-4976-858a-f159cf99c647")
 NIKE_FEED_COUNT = env_int("NIKE_FEED_COUNT", default=40)
+NIKE_ONLY = env_bool("NIKE_ONLY", default="0")
 
 if not all([SHOP_DOMAIN, TOKEN, KICKS_KEY, LOCATION_ID, STOCKX_URL]):
     raise SystemExit("Missing env vars: SHOP_DOMAIN, ADMIN_API_TOKEN, KICKS_API_KEY, LOCATION_ID, STOCKX_PRODUCT_URL (or STOCKX_URL)")
@@ -391,6 +394,22 @@ def nike_feed_fetch(style_color: str, marketplace: str, language: str) -> dict:
         raise RuntimeError(f"Nike feed failed status={r.status_code} body={r.text[:220]}")
     return r.json() or {}
 
+def _object_has_stylecolor(obj, style_color: str) -> bool:
+    sc = style_color.strip().upper()
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if isinstance(v, str):
+                if k.lower() in ("stylecolor", "style_color") and v.strip().upper() == sc:
+                    return True
+            elif isinstance(v, (dict, list)):
+                if _object_has_stylecolor(v, sc):
+                    return True
+    elif isinstance(obj, list):
+        for it in obj:
+            if _object_has_stylecolor(it, sc):
+                return True
+    return False
+
 def nike_feed_extract_urls_strict(feed_json: dict, style_color: str) -> list[str]:
     sc = style_color.strip().upper()
     objs = (feed_json.get("objects") or feed_json.get("data", {}).get("objects") or [])
@@ -399,15 +418,7 @@ def nike_feed_extract_urls_strict(feed_json: dict, style_color: str) -> list[str
 
     best_urls: list[str] = []
     for o in objs[:200]:
-        try:
-            prods = o.get("publishedContent", {}).get("properties", {}).get("products") or []
-        except Exception:
-            prods = []
-        ok = False
-        for p in prods:
-            if isinstance(p, dict) and (str(p.get("styleColor") or "").strip().upper() == sc):
-                ok = True
-                break
+        ok = _object_has_stylecolor(o, sc)
         if not ok:
             continue
 
@@ -436,10 +447,15 @@ def nike_fetch_gallery_urls_from_feed(style_color: str) -> tuple[list[str], str]
     if urls1:
         return urls1, f"{NIKE_MARKETPLACE_PREF}/{NIKE_LANGUAGE_PREF}"
 
-    feed2 = nike_feed_fetch(style_color, NIKE_MARKETPLACE_FALLBACK, NIKE_LANGUAGE_FALLBACK)
+    feed2 = nike_feed_fetch(style_color, NIKE_MARKETPLACE_ALT, NIKE_LANGUAGE_ALT)
     urls2 = nike_feed_extract_urls_strict(feed2, style_color)
     if urls2:
-        return urls2, f"{NIKE_MARKETPLACE_FALLBACK}/{NIKE_LANGUAGE_FALLBACK}"
+        return urls2, f"{NIKE_MARKETPLACE_ALT}/{NIKE_LANGUAGE_ALT}"
+
+    feed3 = nike_feed_fetch(style_color, NIKE_MARKETPLACE_FALLBACK, NIKE_LANGUAGE_FALLBACK)
+    urls3 = nike_feed_extract_urls_strict(feed3, style_color)
+    if urls3:
+        return urls3, f"{NIKE_MARKETPLACE_FALLBACK}/{NIKE_LANGUAGE_FALLBACK}"
 
     return [], "none"
 
@@ -783,6 +799,8 @@ def build_images_nike_else_stockx360(p: dict, style_color: str | None) -> tuple[
             return imgs, "nike_feed"
         except Exception as e:
             print(f"NIKE_FEED failed -> fallback to STOCKX_360. err={str(e)[:220]}")
+            if NIKE_ONLY:
+                raise
     imgs = build_shopify_images_from_stockx_360(p)
     return imgs, "stockx_360"
 
@@ -1106,6 +1124,10 @@ def main():
     print("styleColor=", style_color or "(none)")
 
     print("IMG_NIKE_LIMIT=", NIKE_IMG_LIMIT, "| IMG_NUMBERS_FALLBACK=", IMG_NUMBERS)
+    print("NIKE_PREF=", f"{NIKE_MARKETPLACE_PREF}/{NIKE_LANGUAGE_PREF}",
+          "NIKE_ALT=", f"{NIKE_MARKETPLACE_ALT}/{NIKE_LANGUAGE_ALT}",
+          "NIKE_FALLBACK=", f"{NIKE_MARKETPLACE_FALLBACK}/{NIKE_LANGUAGE_FALLBACK}",
+          "NIKE_ONLY=", 1 if NIKE_ONLY else 0)
     print("DRY_RUN=", 1 if DRY_RUN else 0)
 
     images, img_src = build_images_nike_else_stockx360(p, style_color)

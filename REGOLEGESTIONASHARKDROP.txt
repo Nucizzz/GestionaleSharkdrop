@@ -1,0 +1,132 @@
+﻿# REGOLEGESTIONASHARKDROP
+
+Guida pratica per Sharkdrop Gestionale: struttura progetto, deploy, config, errori tipici.
+
+## 1) Struttura progetto
+- `backend/`  API FastAPI + logica business + import Shopify/StockX/Nike
+- `frontend/` Web app (Expo web export) + app mobile (Expo)
+- `docker-compose.yml`  servizi: `mongo`, `backend`, `frontend`, `caddy`
+- `Caddyfile`  reverse proxy HTTPS per dominio
+- `scripts/`  utilità locali
+
+## 2) Servizi e porte
+- `backend`: porta interna `8001`
+- `frontend`: porta interna `3000` (serve static web)
+- `caddy`: porta `80/443` pubblica
+
+## 3) Configurazioni importanti
+### 3.1 Caddy (reverse proxy)
+File: `Caddyfile`
+
+Deve essere cosi:
+- `reverse_proxy /api/* backend:8001`
+- `reverse_proxy /* frontend:3000`
+
+Se vedi 502 Bad Gateway, quasi sempre:
+- frontend non gira, oppure
+- porta sbagliata nel Caddyfile.
+
+### 3.2 Variabili ambiente
+File server: `/opt/nucizzz-ims/.env`
+File repo: `backend/.env`, `frontend/.env`
+
+Controlla sempre:
+- `EXPO_PUBLIC_BACKEND_URL=https://gestionale.sharkdrop.it`
+- `MONGO_URL=mongodb://mongo:27017`
+- Shopify token e Kicks API key
+
+### 3.3 Volume Mongo (dati)
+File: `docker-compose.yml`
+
+Per non perdere dati, il volume Mongo deve essere esterno:
+```
+volumes:
+  mongo_data:
+    external: true
+    name: gestionale_mongo_data
+```
+
+Se non e cosi, Docker crea un volume nuovo vuoto.
+
+## 4) Deploy rapido (server)
+1) Copia project
+```
+scp project.tgz deploy@84.46.245.46:/home/deploy/
+```
+
+2) Estrai su server
+```
+sudo tar -xzf /home/deploy/project.tgz -C /opt/nucizzz-ims
+```
+
+3) Rebuild
+```
+cd /opt/nucizzz-ims
+docker compose -p nucizzz-ims build
+docker compose -p nucizzz-ims up -d
+```
+
+## 5) Errori tipici e soluzioni
+
+### 5.1 502 Bad Gateway
+Causa:
+- Caddy proxy verso porta sbagliata
+- frontend/backend non avviato
+
+Fix:
+- controlla `Caddyfile`
+- `docker compose ps`
+- `docker compose logs -f frontend` / `backend`
+
+### 5.2 Mixed Content (http/https)
+Errore: chiamate API in `http://` da pagina `https://`
+
+Fix:
+- file `frontend/src/services/api.ts`
+- `getRuntimeApiUrl()` deve usare `https` in produzione
+
+### 5.3 401 Unauthorized
+Causa:
+- token vecchio salvato quando era http
+
+Fix:
+- logout/login
+- oppure cancella `auth_token` in localStorage
+
+### 5.4 Dati spariti (0 prodotti, 0 locations)
+Causa:
+- Mongo collegato a volume nuovo
+
+Fix:
+- usa volume esterno `gestionale_mongo_data`
+- ricrea container mongo/backend
+
+## 6) Aggiornamenti App
+- Se cambi solo backend: NON serve APK
+- Se cambi solo UI JS/TS: usa `eas update`
+- Serve APK solo per cambi nativi (icone, permessi, moduli)
+
+## 7) Log utili
+```
+cd /opt/nucizzz-ims
+docker compose -p nucizzz-ims logs -f backend
+docker compose -p nucizzz-ims logs -f frontend
+docker compose -p nucizzz-ims logs -f caddy
+```
+
+## 8) Check rapido stato
+```
+curl -I https://gestionale.sharkdrop.it
+curl -I https://gestionale.sharkdrop.it/api/health
+```
+
+## 9) File importanti da ricordare
+- `Caddyfile`
+- `docker-compose.yml`
+- `frontend/src/services/api.ts`
+- `backend/server.py`
+- `backend/CARICAPRODOTTI.PY`
+- `/opt/nucizzz-ims/.env`
+
+---
+Se serve, aggiorna questo file dopo ogni cambiamento grosso.

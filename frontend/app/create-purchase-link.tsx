@@ -47,6 +47,20 @@ interface SelectedItem {
   image_base64?: string;
 }
 
+interface SupplierIdentity {
+  id: string;
+  identity_key: string;
+  last_used_at?: string;
+  data: {
+    first_name?: string;
+    last_name?: string;
+    fiscal_code?: string;
+    phone?: string;
+    email?: string;
+    iban?: string;
+  };
+}
+
 export default function CreatePurchaseLinkScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -73,6 +87,11 @@ export default function CreatePurchaseLinkScreen() {
   const [manualName, setManualName] = useState('');
   const [manualPrice, setManualPrice] = useState('');
   const [manualQty, setManualQty] = useState('1');
+  const [identities, setIdentities] = useState<SupplierIdentity[]>([]);
+  const [identityLoading, setIdentityLoading] = useState(false);
+  const [selectedIdentity, setSelectedIdentity] = useState<SupplierIdentity | null>(null);
+  const [showIdentityModal, setShowIdentityModal] = useState(false);
+  const [identityQuery, setIdentityQuery] = useState('');
 
   const pageSize = 60;
 
@@ -106,6 +125,22 @@ export default function CreatePurchaseLinkScreen() {
     };
     run();
   }, []);
+
+  const loadIdentities = useCallback(async () => {
+    try {
+      setIdentityLoading(true);
+      const data = await api.getPurchaseIdentities(undefined, 0, 200);
+      setIdentities(data.items || []);
+    } catch (error) {
+      console.error('Error loading identities:', error);
+    } finally {
+      setIdentityLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadIdentities();
+  }, [loadIdentities]);
 
   const loadInventory = useCallback(async (locId?: string) => {
     try {
@@ -185,6 +220,17 @@ export default function CreatePurchaseLinkScreen() {
       return tokens.every((t) => hay.includes(t));
     });
   }, [inventoryItems, inventoryQuery]);
+
+  const filteredIdentities = useMemo(() => {
+    const q = identityQuery.trim().toLowerCase();
+    if (!q) return identities;
+    const tokens = q.split(/\s+/).filter(Boolean);
+    return identities.filter((it) => {
+      const d = it.data || {};
+      const hay = `${d.first_name || ''} ${d.last_name || ''} ${d.fiscal_code || ''} ${d.phone || ''} ${d.email || ''}`.toLowerCase();
+      return tokens.every((t) => hay.includes(t));
+    });
+  }, [identities, identityQuery]);
 
   const toggleProduct = (product: Product, variant?: { id: string; title: string; price?: number }) => {
     setSelectedItems((prev) => {
@@ -417,7 +463,7 @@ export default function CreatePurchaseLinkScreen() {
 
     setSaving(true);
     try {
-      const result = await api.createPurchaseLink(selectedItems, note || undefined, docType);
+      const result = await api.createPurchaseLink(selectedItems, note || undefined, docType, selectedIdentity?.id || undefined);
       setCreatedLink({ token: result.token, total: result.total_amount });
       setStep('done');
     } catch (error: any) {
@@ -472,101 +518,194 @@ export default function CreatePurchaseLinkScreen() {
         )}
       </View>
 
-      {/* Step indicator */}
-      <View style={styles.stepIndicator}>
-        <View style={[styles.step, step !== 'done' && styles.stepActive]}>
-          <Text style={styles.stepNumber}>1</Text>
-        </View>
-        <View style={styles.stepLine} />
-        <View style={[styles.step, (step === 'prices' || step === 'done') && styles.stepActive]}>
-          <Text style={styles.stepNumber}>2</Text>
-        </View>
-        <View style={styles.stepLine} />
-        <View style={[styles.step, step === 'done' && styles.stepActive]}>
-          <Text style={styles.stepNumber}>3</Text>
-        </View>
-      </View>
-
       {step === 'select' && (
         <>
-          <View style={styles.docTypeCard}>
-            <Text style={styles.docTypeLabel}>Tipo documento</Text>
-            <View style={styles.docTypeRow}>
-              <TouchableOpacity
-                style={[styles.docTypeOption, docType === 'acquisto' && styles.docTypeOptionActive]}
-                onPress={() => setDocType('acquisto')}
-              >
-                <Text style={[styles.docTypeText, docType === 'acquisto' && styles.docTypeTextActive]}>Acquisto</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.docTypeOption, docType === 'contovendita' && styles.docTypeOptionActive]}
-                onPress={() => setDocType('contovendita')}
-              >
-                <Text style={[styles.docTypeText, docType === 'contovendita' && styles.docTypeTextActive]}>Contovendita</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.docTypeCard}>
-            <Text style={styles.docTypeLabel}>Fonte prodotti</Text>
-            <View style={styles.docTypeRow}>
-              <TouchableOpacity
-                style={[styles.docTypeOption, sourceMode === 'catalogo' && styles.docTypeOptionActive]}
-                onPress={() => setSourceMode('catalogo')}
-              >
-                <Text style={[styles.docTypeText, sourceMode === 'catalogo' && styles.docTypeTextActive]}>Catalogo</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.docTypeOption, sourceMode === 'inventario' && styles.docTypeOptionActive]}
-                onPress={() => setSourceMode('inventario')}
-              >
-                <Text style={[styles.docTypeText, sourceMode === 'inventario' && styles.docTypeTextActive]}>Inventario</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          {/* Search */}
-          {sourceMode === 'inventario' ? (
-            <>
-              <Text style={styles.locationLabel}>Filtro location</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.locationRow}>
-                <TouchableOpacity
-                  style={[styles.locationChip, !locationId && styles.locationChipActive]}
-                  onPress={() => setLocationId('')}
-                >
-                  <Text style={[styles.locationChipText, !locationId && styles.locationChipTextActive]}>Tutte</Text>
-                </TouchableOpacity>
-                {locations.map((loc) => (
-                  <TouchableOpacity
-                    key={loc.id}
-                    style={[styles.locationChip, locationId === loc.id && styles.locationChipActive]}
-                    onPress={() => setLocationId(loc.id)}
-                  >
-                    <Text style={[styles.locationChipText, locationId === loc.id && styles.locationChipTextActive]}>
-                      {loc.name}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-              <View style={styles.searchContainer}>
-                <Ionicons name="search" size={20} color="#999" />
-                <TextInput
-                  style={styles.searchInput}
-                  placeholder="Cerca in inventario..."
-                  value={inventoryQuery}
-                  onChangeText={setInventoryQuery}
-                />
+          {(() => {
+            const listHeader = (
+              <View style={styles.selectHeader}>
+                <View style={styles.stepIndicator}>
+                  <View style={[styles.step, step !== 'done' && styles.stepActive]}>
+                    <Text style={styles.stepNumber}>1</Text>
+                  </View>
+                  <View style={styles.stepLine} />
+                  <View style={[styles.step, (step === 'prices' || step === 'done') && styles.stepActive]}>
+                    <Text style={styles.stepNumber}>2</Text>
+                  </View>
+                  <View style={styles.stepLine} />
+                  <View style={[styles.step, step === 'done' && styles.stepActive]}>
+                    <Text style={styles.stepNumber}>3</Text>
+                  </View>
+                </View>
+
+                <View style={styles.docTypeCard}>
+                  <Text style={styles.docTypeLabel}>Tipo documento</Text>
+                  <View style={styles.docTypeRow}>
+                    <TouchableOpacity
+                      style={[styles.docTypeOption, docType === 'acquisto' && styles.docTypeOptionActive]}
+                      onPress={() => setDocType('acquisto')}
+                    >
+                      <Text style={[styles.docTypeText, docType === 'acquisto' && styles.docTypeTextActive]}>Acquisto</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.docTypeOption, docType === 'contovendita' && styles.docTypeOptionActive]}
+                      onPress={() => setDocType('contovendita')}
+                    >
+                      <Text style={[styles.docTypeText, docType === 'contovendita' && styles.docTypeTextActive]}>Contovendita</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.docTypeCard}>
+                  <View style={styles.identityHeader}>
+                    <Text style={styles.docTypeLabel}>Identita fornitore (opzionale)</Text>
+                    <TouchableOpacity onPress={() => setShowIdentityModal(true)} style={styles.identityPickBtn}>
+                      <Ionicons name="person-add-outline" size={16} color="#111" />
+                      <Text style={styles.identityPickText}>Seleziona</Text>
+                    </TouchableOpacity>
+                  </View>
+                  {selectedIdentity ? (
+                    <View style={styles.identityCard}>
+                      <View style={{ flex: 1 }}>
+                        <Text style={styles.identityName}>
+                          {(selectedIdentity.data?.first_name || '').trim()} {(selectedIdentity.data?.last_name || '').trim()}
+                        </Text>
+                        <Text style={styles.identityMeta}>CF: {selectedIdentity.data?.fiscal_code || 'n/a'}</Text>
+                        {selectedIdentity.data?.phone ? (
+                          <Text style={styles.identityMeta}>Tel: {selectedIdentity.data?.phone}</Text>
+                        ) : null}
+                        {selectedIdentity.data?.email ? (
+                          <Text style={styles.identityMeta}>Email: {selectedIdentity.data?.email}</Text>
+                        ) : null}
+                      </View>
+                      <TouchableOpacity onPress={() => setSelectedIdentity(null)} style={styles.identityClearBtn}>
+                        <Ionicons name="close" size={16} color="#dc2626" />
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    <Text style={styles.identityEmpty}>Nessuna identita selezionata</Text>
+                  )}
+                  {identityLoading && <Text style={styles.identityLoading}>Caricamento identita...</Text>}
+                </View>
+                <View style={styles.docTypeCard}>
+                  <Text style={styles.docTypeLabel}>Fonte prodotti</Text>
+                  <View style={styles.docTypeRow}>
+                    <TouchableOpacity
+                      style={[styles.docTypeOption, sourceMode === 'catalogo' && styles.docTypeOptionActive]}
+                      onPress={() => setSourceMode('catalogo')}
+                    >
+                      <Text style={[styles.docTypeText, sourceMode === 'catalogo' && styles.docTypeTextActive]}>Catalogo</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.docTypeOption, sourceMode === 'inventario' && styles.docTypeOptionActive]}
+                      onPress={() => setSourceMode('inventario')}
+                    >
+                      <Text style={[styles.docTypeText, sourceMode === 'inventario' && styles.docTypeTextActive]}>Inventario</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                {sourceMode === 'inventario' ? (
+                  <>
+                    <Text style={styles.locationLabel}>Filtro location</Text>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.locationRow}>
+                      <TouchableOpacity
+                        style={[styles.locationChip, !locationId && styles.locationChipActive]}
+                        onPress={() => setLocationId('')}
+                      >
+                        <Text style={[styles.locationChipText, !locationId && styles.locationChipTextActive]}>Tutte</Text>
+                      </TouchableOpacity>
+                      {locations.map((loc) => (
+                        <TouchableOpacity
+                          key={loc.id}
+                          style={[styles.locationChip, locationId === loc.id && styles.locationChipActive]}
+                          onPress={() => setLocationId(loc.id)}
+                        >
+                          <Text style={[styles.locationChipText, locationId === loc.id && styles.locationChipTextActive]}>
+                            {loc.name}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                    <View style={styles.searchContainer}>
+                      <Ionicons name="search" size={20} color="#999" />
+                      <TextInput
+                        style={styles.searchInput}
+                        placeholder="Cerca in inventario..."
+                        value={inventoryQuery}
+                        onChangeText={setInventoryQuery}
+                      />
+                    </View>
+                  </>
+                ) : (
+                  <View style={styles.searchContainer}>
+                    <Ionicons name="search" size={20} color="#999" />
+                    <TextInput
+                      style={styles.searchInput}
+                      placeholder="Cerca prodotti..."
+                      value={searchQuery}
+                      onChangeText={setSearchQuery}
+                    />
+                  </View>
+                )}
               </View>
-            </>
-          ) : (
-            <View style={styles.searchContainer}>
-              <Ionicons name="search" size={20} color="#999" />
-              <TextInput
-                style={styles.searchInput}
-                placeholder="Cerca prodotti..."
-                value={searchQuery}
-                onChangeText={setSearchQuery}
+            );
+
+            const listFooter = (
+              <View style={styles.actionFooter}>
+                {!searchQuery.trim() && sourceMode === 'catalogo' && products.length < totalProducts && (
+                  <View style={styles.loadMoreBox}>
+                    <Button
+                      title={loadingMore ? 'Caricamento...' : 'Carica altri'}
+                      onPress={handleLoadMore}
+                      loading={loadingMore}
+                    />
+                    <Text style={styles.loadMoreHint}>
+                      {products.length} / {totalProducts} prodotti
+                    </Text>
+                  </View>
+                )}
+                {inventoryLoading && sourceMode === 'inventario' && (
+                  <View style={styles.loadMoreBox}>
+                    <Text style={styles.loadMoreHint}>Caricamento inventario...</Text>
+                  </View>
+                )}
+                <View style={styles.bottomBarInline}>
+                  <Text style={styles.selectedCount}>{selectedItems.length} prodotti selezionati</Text>
+                  <Button
+                    title="Continua"
+                    onPress={() => setStep('prices')}
+                    disabled={selectedItems.length === 0}
+                  />
+                </View>
+              </View>
+            );
+
+            return sourceMode === 'catalogo' ? (
+              <FlatList
+                style={styles.content}
+                contentContainerStyle={styles.listContent}
+                data={filteredProducts}
+                keyExtractor={(item) => item.id}
+                renderItem={renderProduct}
+                initialNumToRender={12}
+                windowSize={7}
+                removeClippedSubviews={false}
+                ListHeaderComponent={listHeader}
+                ListFooterComponent={listFooter}
               />
-            </View>
-          )}
+            ) : (
+              <FlatList
+                style={styles.content}
+                contentContainerStyle={styles.listContent}
+                data={filteredInventory}
+                keyExtractor={(item) => item.id}
+                renderItem={renderInventoryItem}
+                initialNumToRender={12}
+                windowSize={7}
+                removeClippedSubviews={false}
+                ListHeaderComponent={listHeader}
+                ListFooterComponent={listFooter}
+              />
+            );
+          })()}
 
           <Modal
             visible={showManualModal}
@@ -611,71 +750,78 @@ export default function CreatePurchaseLinkScreen() {
             </View>
           </Modal>
 
-          {/* Products List */}
-          {sourceMode === 'catalogo' ? (
-            <FlatList
-              style={styles.content}
-              contentContainerStyle={styles.listContent}
-              data={filteredProducts}
-              keyExtractor={(item) => item.id}
-              renderItem={renderProduct}
-              initialNumToRender={12}
-              windowSize={7}
-              removeClippedSubviews={false}
-              ListFooterComponent={
-                <>
-                  {!searchQuery.trim() && products.length < totalProducts && (
-                    <View style={styles.loadMoreBox}>
-                      <Button
-                        title={loadingMore ? 'Caricamento...' : 'Carica altri'}
-                        onPress={handleLoadMore}
-                        loading={loadingMore}
-                      />
-                      <Text style={styles.loadMoreHint}>
-                        {products.length} / {totalProducts} prodotti
-                      </Text>
-                    </View>
+          <Modal
+            visible={showIdentityModal}
+            animationType="slide"
+            transparent
+            onRequestClose={() => setShowIdentityModal(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalCard}>
+                <Text style={styles.modalTitle}>Seleziona identita</Text>
+                <View style={styles.searchContainer}>
+                  <Ionicons name="search" size={18} color="#999" />
+                  <TextInput
+                    style={styles.searchInput}
+                    placeholder="Cerca nome, codice fiscale..."
+                    value={identityQuery}
+                    onChangeText={setIdentityQuery}
+                  />
+                </View>
+                <ScrollView style={{ maxHeight: 320 }} contentContainerStyle={{ paddingVertical: 8 }}>
+                  {filteredIdentities.length === 0 && (
+                    <Text style={styles.identityEmpty}>Nessuna identita trovata</Text>
                   )}
-                </>
-              }
-            />
-          ) : (
-            <FlatList
-              style={styles.content}
-              contentContainerStyle={styles.listContent}
-              data={filteredInventory}
-              keyExtractor={(item) => item.id}
-              renderItem={renderInventoryItem}
-              initialNumToRender={12}
-              windowSize={7}
-              removeClippedSubviews={false}
-              ListFooterComponent={
-                <>
-                  {inventoryLoading && (
-                    <View style={styles.loadMoreBox}>
-                      <Text style={styles.loadMoreHint}>Caricamento inventario...</Text>
-                    </View>
-                  )}
-                </>
-              }
-            />
-          )}
-
-          {/* Bottom Bar */}
-          <View style={[styles.bottomBar, { paddingBottom: insets.bottom + 16 }]}>
-            <Text style={styles.selectedCount}>{selectedItems.length} prodotti selezionati</Text>
-            <Button
-              title="Continua"
-              onPress={() => setStep('prices')}
-              disabled={selectedItems.length === 0}
-            />
-          </View>
+                  {filteredIdentities.map((identity) => {
+                    const name = `${identity.data?.first_name || ''} ${identity.data?.last_name || ''}`.trim() || 'Senza nome';
+                    return (
+                      <TouchableOpacity
+                        key={identity.id}
+                        style={styles.identityOption}
+                        onPress={() => {
+                          setSelectedIdentity(identity);
+                          setShowIdentityModal(false);
+                        }}
+                      >
+                        <View>
+                          <Text style={styles.identityOptionTitle}>{name}</Text>
+                          <Text style={styles.identityOptionMeta}>CF: {identity.data?.fiscal_code || 'n/a'}</Text>
+                          {identity.data?.phone ? (
+                            <Text style={styles.identityOptionMeta}>Tel: {identity.data?.phone}</Text>
+                          ) : null}
+                        </View>
+                        <Ionicons name="chevron-forward" size={18} color="#999" />
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
+                <View style={styles.modalActions}>
+                  <TouchableOpacity onPress={() => setShowIdentityModal(false)} style={styles.modalCancel}>
+                    <Text style={styles.modalCancelText}>Chiudi</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </>
       )}
 
       {step === 'prices' && (
         <>
-          <ScrollView style={styles.content}>
+          <ScrollView style={styles.content} contentContainerStyle={styles.listContent}>
+            <View style={styles.stepIndicator}>
+              <View style={[styles.step, step !== 'done' && styles.stepActive]}>
+                <Text style={styles.stepNumber}>1</Text>
+              </View>
+              <View style={styles.stepLine} />
+              <View style={[styles.step, (step === 'prices' || step === 'done') && styles.stepActive]}>
+                <Text style={styles.stepNumber}>2</Text>
+              </View>
+              <View style={styles.stepLine} />
+              <View style={[styles.step, step === 'done' && styles.stepActive]}>
+                <Text style={styles.stepNumber}>3</Text>
+              </View>
+            </View>
             {selectedItems.map((item, index) => (
               <View key={index} style={styles.priceCard}>
                 <View style={styles.priceCardHeader}>
@@ -744,25 +890,23 @@ export default function CreatePurchaseLinkScreen() {
                 multiline
               />
             </View>
-
-            <View style={{ height: 120 }} />
+            <View style={styles.actionFooter}>
+              <View style={styles.bottomBarInline}>
+                <View>
+                  <Text style={styles.totalLabel}>Totale</Text>
+                  {docType === 'acquisto' ? (
+                    <Text style={styles.totalValue}>EUR {getTotal().toFixed(2)}</Text>
+                  ) : (
+                    <Text style={styles.totalValue}>n/a</Text>
+                  )}
+                </View>
+                <View style={{ flexDirection: 'row', gap: 12 }}>
+                  <Button title="Indietro" onPress={() => setStep('select')} variant="outline" />
+                  <Button title="Crea Link" onPress={handleCreateLink} loading={saving} />
+                </View>
+              </View>
+            </View>
           </ScrollView>
-
-          {/* Bottom Bar */}
-          <View style={[styles.bottomBar, { paddingBottom: insets.bottom + 16 }]}>
-            <View>
-              <Text style={styles.totalLabel}>Totale</Text>
-              {docType === 'acquisto' ? (
-                <Text style={styles.totalValue}>EUR {getTotal().toFixed(2)}</Text>
-              ) : (
-                <Text style={styles.totalValue}>n/a</Text>
-              )}
-            </View>
-            <View style={{ flexDirection: 'row', gap: 12 }}>
-              <Button title="Indietro" onPress={() => setStep('select')} variant="outline" />
-              <Button title="Crea Link" onPress={handleCreateLink} loading={saving} />
-            </View>
-          </View>
         </>
       )}
 
@@ -923,6 +1067,65 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
   },
+  identityHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 6,
+  },
+  identityPickBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: '#f2f2f2',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  identityPickText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#111',
+  },
+  identityCard: {
+    backgroundColor: '#f8f8f8',
+    borderRadius: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
+  identityName: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#111',
+  },
+  identityMeta: {
+    fontSize: 12,
+    color: '#555',
+    marginTop: 2,
+  },
+  identityClearBtn: {
+    padding: 4,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: '#f3b0b0',
+    backgroundColor: '#fff5f5',
+  },
+  identityEmpty: {
+    fontSize: 12,
+    color: '#777',
+    marginTop: 6,
+  },
+  identityLoading: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 6,
+  },
   docTypeLabel: {
     fontSize: 13,
     fontWeight: '600',
@@ -1005,6 +1208,25 @@ const styles = StyleSheet.create({
     gap: 12,
     marginTop: 16,
   },
+  identityOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  identityOptionTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#111',
+  },
+  identityOptionMeta: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 2,
+  },
   modalCancel: {
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -1028,7 +1250,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   listContent: {
-    paddingBottom: 140,
+    paddingBottom: 24,
+  },
+  selectHeader: {
+    paddingBottom: 6,
+  },
+  actionFooter: {
+    paddingTop: 12,
+    paddingBottom: 24,
+    gap: 12,
+  },
+  bottomBarInline: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
   },
   productCard: {
     backgroundColor: '#fff',

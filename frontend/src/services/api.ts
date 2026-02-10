@@ -8,7 +8,8 @@ const getRuntimeApiUrl = () => {
   if (host === 'localhost' || host === '127.0.0.1') {
     return `http://${host}:${FALLBACK_PORT}`;
   }
-  return `http://${host}:${FALLBACK_PORT}`;
+  const proto = window.location.protocol || 'https:';
+  return `${proto}//${host}`;
 };
 
 const isWeb = typeof window !== 'undefined' && !!window.location?.hostname;
@@ -589,6 +590,16 @@ class ApiService {
     return response.data;
   }
 
+  async pushLocalProduct(data: {
+    product_id: string;
+    used_tag?: boolean;
+    extra_tags?: string;
+    keep_photo_bg?: boolean;
+  }) {
+    const response = await this.api.post('/shopify/push-product', data);
+    return response.data;
+  }
+
   // Purchase Links (Acquisto da Fornitore)
   async createPurchaseLink(items: {
     product_id?: string;
@@ -597,8 +608,8 @@ class ApiService {
     variant_title?: string;
     quantity: number;
     purchase_price: number;
-  }[], note?: string, docType?: 'acquisto' | 'contovendita') {
-    const response = await this.api.post('/purchase-links', { items, note, doc_type: docType });
+  }[], note?: string, docType?: 'acquisto' | 'contovendita', identityId?: string | null) {
+    const response = await this.api.post('/purchase-links', { items, note, doc_type: docType, identity_id: identityId || undefined });
     return response.data;
   }
 
@@ -615,6 +626,18 @@ class ApiService {
 
   async deletePurchaseLink(linkId: string) {
     const response = await this.api.delete(`/purchase-links/${linkId}`);
+    return response.data;
+  }
+
+  async getPurchaseIdentities(q?: string, skip = 0, limit = 100) {
+    const params: any = { skip, limit };
+    if (q && q.trim()) params.q = q.trim();
+    const response = await this.api.get('/purchase-identities', { params });
+    return response.data;
+  }
+
+  async getPurchaseIdentity(identityId: string) {
+    const response = await this.api.get(`/purchase-identities/${identityId}`);
     return response.data;
   }
 
