@@ -152,6 +152,33 @@ headers_shop_gql = {"X-Shopify-Access-Token": TOKEN, "Content-Type": "applicatio
 headers_kx = {"Authorization": f"Bearer {KICKS_KEY}"}
 LOCATION_GID = f"gid://shopify/Location/{LOCATION_ID}"
 
+# -------------------------
+# Metafields (align with IMPORTAPRODOTTISTOCKX.PY)
+# -------------------------
+STOCKX_SLUG_NAMESPACE = env_pick("STOCKX_SLUG_NAMESPACE", default="custom")
+STOCKX_SLUG_KEY = env_pick("STOCKX_SLUG_KEY", default="stockx_slug")
+
+MF_NS = env_pick("MF_NAMESPACE", default="custom")
+MF_RELEASE_DATE_KEY = env_pick("MF_RELEASE_DATE_KEY", default="release_date")
+MF_IDENTIFIER_EXISTS_KEY = env_pick("MF_IDENTIFIER_EXISTS_KEY", default="identifier_exists")
+
+VARIANT_SIZE_METAFIELD = env_pick("VARIANT_SIZE_METAFIELD", default="1") == "1"
+VARIANT_SIZE_NAMESPACE = env_pick("VARIANT_SIZE_NAMESPACE", default="custom")
+VARIANT_SIZE_KEY = env_pick("VARIANT_SIZE_KEY", default="shoe_size")
+
+UPC_BACKUP_METAFIELD = env_pick("UPC_BACKUP_METAFIELD", default="1") == "1"
+UPC_BACKUP_NAMESPACE = env_pick("UPC_BACKUP_NAMESPACE", default="custom")
+UPC_BACKUP_KEY = env_pick("UPC_BACKUP_KEY", default="upc_backup")
+
+MM_GOOGLE_NS = env_pick("MM_GOOGLE_NS", default="mm-google-shopping")
+MM_KEY_CONDITION = env_pick("MM_GOOGLE_KEY_CONDITION", default="condition")
+MM_KEY_GENDER = env_pick("MM_GOOGLE_KEY_GENDER", default="gender")
+MM_KEY_AGE_GROUP = env_pick("MM_GOOGLE_KEY_AGE_GROUP", default="age_group")
+MM_KEY_MPN = env_pick("MM_GOOGLE_KEY_MPN", default="mpn")
+
+MM_VAL_CONDITION = env_pick("GOOGLE_CONDITION_VALUE", default="new")
+MM_VAL_GENDER = env_pick("GOOGLE_GENDER_VALUE", default="unisex")
+
 NIKE_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
     "Accept": "application/json,text/plain,*/*",
@@ -798,6 +825,72 @@ def inventory_set_quantities_at_location(inventory_item_gids: list[str], quantit
     return ok
 
 # -------------------------
+# Metafields helpers
+# -------------------------
+def metafields_set_batched(items: list, batch_size: int = 25) -> bool:
+    if not items:
+        return True
+    m = """
+    mutation($metafields:[MetafieldsSetInput!]!){
+      metafieldsSet(metafields:$metafields){
+        metafields{ id key namespace }
+        userErrors{ field message code }
+      }
+    }"""
+    ok = True
+    for i in range(0, len(items), batch_size):
+        chunk = items[i:i+batch_size]
+        if DRY_RUN:
+            print("DRY_RUN metafieldsSet chunk=", len(chunk))
+            continue
+        data = gql(m, {"metafields": chunk})
+        errs = data["metafieldsSet"]["userErrors"]
+        if errs:
+            ok = False
+            print("METAFIELDS ERR", errs)
+        time.sleep(0.08)
+    return ok
+
+def build_product_metafields(product_gid_str: str, slug: str, release_date: str | None, identifier_exists: bool) -> list:
+    items = [{
+        "ownerId": product_gid_str,
+        "namespace": STOCKX_SLUG_NAMESPACE,
+        "key": STOCKX_SLUG_KEY,
+        "type": "single_line_text_field",
+        "value": slug
+    }]
+    if release_date:
+        items.append({
+            "ownerId": product_gid_str,
+            "namespace": MF_NS,
+            "key": MF_RELEASE_DATE_KEY,
+            "type": "date",
+            "value": release_date
+        })
+    items.append({
+        "ownerId": product_gid_str,
+        "namespace": MF_NS,
+        "key": MF_IDENTIFIER_EXISTS_KEY,
+        "type": "boolean",
+        "value": "true" if identifier_exists else "false"
+    })
+    return items
+
+def build_variant_metafields(vgid: str, eu_size_display: str, age_group: str, mpn: str | None, upc_backup: str | None) -> list:
+    items = [
+        {"ownerId": vgid, "namespace": MM_GOOGLE_NS, "key": MM_KEY_CONDITION, "type": "single_line_text_field", "value": MM_VAL_CONDITION},
+        {"ownerId": vgid, "namespace": MM_GOOGLE_NS, "key": MM_KEY_GENDER, "type": "single_line_text_field", "value": MM_VAL_GENDER},
+        {"ownerId": vgid, "namespace": MM_GOOGLE_NS, "key": MM_KEY_AGE_GROUP, "type": "single_line_text_field", "value": age_group},
+    ]
+    if mpn:
+        items.append({"ownerId": vgid, "namespace": MM_GOOGLE_NS, "key": MM_KEY_MPN, "type": "single_line_text_field", "value": mpn})
+    if VARIANT_SIZE_METAFIELD and eu_size_display:
+        items.append({"ownerId": vgid, "namespace": VARIANT_SIZE_NAMESPACE, "key": VARIANT_SIZE_KEY, "type": "single_line_text_field", "value": eu_size_display})
+    if UPC_BACKUP_METAFIELD and upc_backup:
+        items.append({"ownerId": vgid, "namespace": UPC_BACKUP_NAMESPACE, "key": UPC_BACKUP_KEY, "type": "single_line_text_field", "value": upc_backup})
+    return items
+
+# -------------------------
 # Identifier rule (prefers EAN starting with 40; backups UPC12)
 # -------------------------
 def choose_barcode_and_upc_backup(identifiers: list) -> tuple[str | None, str | None]:
@@ -1064,6 +1157,14 @@ def main():
 
     print("Created product_id=", pid, "| title=", created.get("title"))
 
+    pgid = product_gid(int(pid))
+    print("Created product_id=", pid, "| title=", created.get("title"))
+
+    # Product metafields (slug + release_date + identifier_exists)
+    pmf = build_product_metafields(pgid, slug, release_date, any_gtin)
+    ok_pmf = metafields_set_batched(pmf, batch_size=25)
+    print("Product metafields set:", ok_pmf, "| count:", len(pmf))
+
     created_variants = created.get("variants") or []
     inv_item_gids = []
     for vv in created_variants:
@@ -1073,6 +1174,31 @@ def main():
 
     ok_inv = inventory_set_quantities_at_location(inv_item_gids, DEFAULT_QTY, LOCATION_GID)
     print("Inventory set qty=", DEFAULT_QTY, "| ok=", 1 if ok_inv else 0, "| variants=", len(inv_item_gids))
+
+    # Variant metafields (size + UPC backup + Google attrs)
+    vmf_items = []
+    wrote_upc = 0
+    wrote_size = 0
+    for vv in created_variants:
+        vid = vv.get("id")
+        if not vid:
+            continue
+        opt1 = (vv.get("option1") or "").strip()
+        eu_num = size_numeric_key(opt1)
+        if eu_num >= 9999:
+            continue
+        eu_raw = eu_display(eu_num)
+        vgid = variant_gid(int(vid))
+        mpn = raw_sku
+        upc_backup = (per_size.get(eu_raw, {}) or {}).get("upc_backup") or None
+        vmf_items.extend(build_variant_metafields(vgid, eu_raw, age_group, mpn=mpn, upc_backup=upc_backup))
+        if VARIANT_SIZE_METAFIELD and eu_raw:
+            wrote_size += 1
+        if UPC_BACKUP_METAFIELD and upc_backup:
+            wrote_upc += 1
+
+    ok_vmf = metafields_set_batched(vmf_items, batch_size=25)
+    print("Variant metafields set:", ok_vmf, "| items:", len(vmf_items), "| size_written:", wrote_size, "| upc_backup_written:", wrote_upc)
 
     print("DONE.")
 
