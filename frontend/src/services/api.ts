@@ -23,7 +23,9 @@ const normalizeApiBase = (value: string) => {
 const RAW_API_URL = isWeb
   ? ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
       ? getRuntimeApiUrl()
-      : (process.env.EXPO_PUBLIC_BACKEND_URL || getRuntimeApiUrl()))
+      : (window.location.hostname === 'gestionale.sharkdrop.it'
+          ? 'https://gestionale.sharkdrop.it'
+          : (process.env.EXPO_PUBLIC_BACKEND_URL || getRuntimeApiUrl())))
   : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
 
 const API_URL = normalizeApiBase(RAW_API_URL);
