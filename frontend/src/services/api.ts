@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuthStore } from '../store/authStore';
 
 const FALLBACK_PORT = '8001';
 const getRuntimeApiUrl = () => {
@@ -67,10 +68,23 @@ class ApiService {
 
     // Add auth token to requests
     this.api.interceptors.request.use(async (config) => {
-      const token = await AsyncStorage.getItem('auth_token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+      let token: string | null = null;
+      try {
+        token = await AsyncStorage.getItem('auth_token');
+      } catch {
+        token = null;
       }
+      if (!token && typeof window !== 'undefined') {
+        try {
+          token = window.localStorage?.getItem('auth_token') || null;
+        } catch {
+          token = null;
+        }
+      }
+      if (!token) {
+        token = useAuthStore.getState().token;
+      }
+      if (token) config.headers.Authorization = `Bearer ${token}`;
       return config;
     });
   }
